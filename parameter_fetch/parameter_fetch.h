@@ -22,4 +22,6 @@ struct parameter {
 };
 extern struct parameter mos;
 void init_default_parameters(void);
+int load_parameters_from_file(const char *fname);
+void print_parameters(void);
 #endif

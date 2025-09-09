@@ -4,5 +4,6 @@
 int main()
 {
     init_default_parameters();
+    print_parameters();
 }
 
