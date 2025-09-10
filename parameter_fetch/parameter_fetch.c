@@ -13,6 +13,7 @@ void init_default_parameters(void) {
     mos.eps_si    = 11.68 * 8.854e-12;
     mos.Na = 1e23;
     mos.Nd = 0;
+    mos.ni=1.45e10;
     mos.mu_n = 0.135;
     mos.mu_p = 0.045;
 

@@ -1,6 +1,7 @@
 #ifndef PARAMETER
 #define PARAMETER
 #define kB 8.617333262e-5
+#define q 1.6e-19
 struct parameter {
     double t_oxide;//Thickness of oxide. Again not needed ig
     double area;//Area of mos(not needed ig. sir said unit area)
@@ -14,6 +15,7 @@ struct parameter {
     double Nd; //Doping conc
     double mu_n;// Mobility of n in silicon
     double mu_p; //Mobility of p in silicon
+    double ni;
 
     double Vg;
     double Vfb;
