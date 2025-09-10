@@ -3,6 +3,7 @@
 
 CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o: /home/sarthak/Documents/mos-cv/carrier_continuity/carrier.c \
   /home/sarthak/Documents/mos-cv/parameter_fetch/parameter_fetch.h \
+  /home/sarthak/Documents/mos-cv/carrier_continuity/carrier.h \
   /usr/include/alloca.h \
   /usr/include/bits/atomic_wide_counter.h \
   /usr/include/bits/byteswap.h \
@@ -74,6 +75,8 @@ CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o: /home/sarthak/Documents/mo
 CMakeFiles/mos_cv.dir/main.c.o: /home/sarthak/Documents/mos-cv/main.c \
   /home/sarthak/Documents/mos-cv/main.h \
   /home/sarthak/Documents/mos-cv/parameter_fetch/parameter_fetch.h \
+  /home/sarthak/Documents/mos-cv/main.h \
+  /home/sarthak/Documents/mos-cv/solve_c/solve_c.h \
   /usr/include/bits/floatn-common.h \
   /usr/include/bits/floatn.h \
   /usr/include/bits/libc-header-start.h \
@@ -98,6 +101,40 @@ CMakeFiles/mos_cv.dir/main.c.o: /home/sarthak/Documents/mos-cv/main.c \
   /usr/include/gnu/stubs.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdio.h \
+  /usr/include/sys/cdefs.h \
+  /usr/lib/gcc/x86_64-redhat-linux/15/include/stdarg.h \
+  /usr/lib/gcc/x86_64-redhat-linux/15/include/stddef.h
+
+CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o: /home/sarthak/Documents/mos-cv/parameter_fetch/parameter_fetch.c \
+  /home/sarthak/Documents/mos-cv/parameter_fetch/parameter_fetch.h \
+  /usr/include/bits/floatn-common.h \
+  /usr/include/bits/floatn.h \
+  /usr/include/bits/libc-header-start.h \
+  /usr/include/bits/long-double.h \
+  /usr/include/bits/stdio.h \
+  /usr/include/bits/stdio_lim.h \
+  /usr/include/bits/time64.h \
+  /usr/include/bits/timesize.h \
+  /usr/include/bits/types.h \
+  /usr/include/bits/types/FILE.h \
+  /usr/include/bits/types/__FILE.h \
+  /usr/include/bits/types/__fpos64_t.h \
+  /usr/include/bits/types/__fpos_t.h \
+  /usr/include/bits/types/__locale_t.h \
+  /usr/include/bits/types/__mbstate_t.h \
+  /usr/include/bits/types/cookie_io_functions_t.h \
+  /usr/include/bits/types/locale_t.h \
+  /usr/include/bits/types/struct_FILE.h \
+  /usr/include/bits/typesizes.h \
+  /usr/include/bits/wordsize.h \
+  /usr/include/features-time64.h \
+  /usr/include/features.h \
+  /usr/include/gnu/stubs-64.h \
+  /usr/include/gnu/stubs.h \
+  /usr/include/stdc-predef.h \
+  /usr/include/stdio.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
   /usr/include/sys/cdefs.h \
   /usr/lib/gcc/x86_64-redhat-linux/15/include/stdarg.h \
   /usr/lib/gcc/x86_64-redhat-linux/15/include/stddef.h
@@ -171,6 +208,37 @@ CMakeFiles/mos_cv.dir/poisson/poisson.c.o: /home/sarthak/Documents/mos-cv/poisso
   /usr/lib/gcc/x86_64-redhat-linux/15/include/stdarg.h \
   /usr/lib/gcc/x86_64-redhat-linux/15/include/stddef.h
 
+CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o: /home/sarthak/Documents/mos-cv/solve_c/solve_c.c \
+  /home/sarthak/Documents/mos-cv/main.h \
+  /home/sarthak/Documents/mos-cv/solve_c/solve_c.h \
+  /usr/include/bits/floatn-common.h \
+  /usr/include/bits/floatn.h \
+  /usr/include/bits/libc-header-start.h \
+  /usr/include/bits/long-double.h \
+  /usr/include/bits/stdio.h \
+  /usr/include/bits/stdio_lim.h \
+  /usr/include/bits/time64.h \
+  /usr/include/bits/timesize.h \
+  /usr/include/bits/types.h \
+  /usr/include/bits/types/FILE.h \
+  /usr/include/bits/types/__FILE.h \
+  /usr/include/bits/types/__fpos64_t.h \
+  /usr/include/bits/types/__fpos_t.h \
+  /usr/include/bits/types/__mbstate_t.h \
+  /usr/include/bits/types/cookie_io_functions_t.h \
+  /usr/include/bits/types/struct_FILE.h \
+  /usr/include/bits/typesizes.h \
+  /usr/include/bits/wordsize.h \
+  /usr/include/features-time64.h \
+  /usr/include/features.h \
+  /usr/include/gnu/stubs-64.h \
+  /usr/include/gnu/stubs.h \
+  /usr/include/stdc-predef.h \
+  /usr/include/stdio.h \
+  /usr/include/sys/cdefs.h \
+  /usr/lib/gcc/x86_64-redhat-linux/15/include/stdarg.h \
+  /usr/lib/gcc/x86_64-redhat-linux/15/include/stddef.h
+
 mos_cv: /lib64/ld-linux-x86-64.so.2 \
   /lib64/libc.so.6 \
   /lib64/libgcc_s.so.1 \
@@ -186,16 +254,16 @@ mos_cv: /lib64/ld-linux-x86-64.so.2 \
   /usr/lib/gcc/x86_64-redhat-linux/15/libgcc.a \
   /usr/lib/gcc/x86_64-redhat-linux/15/libgcc_s.so \
   /usr/lib64/libc_nonshared.a \
-  CMakeFiles/mos_cv.dir/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c.o \
   CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o \
   CMakeFiles/mos_cv.dir/main.c.o \
-  CMakeFiles/mos_cv.dir/parameter_fetch/parameter-fetch.c.o \
-  CMakeFiles/mos_cv.dir/poisson/poisson.c.o
+  CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o \
+  CMakeFiles/mos_cv.dir/poisson/poisson.c.o \
+  CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o
 
+
+CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o:
 
 CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o:
-
-CMakeFiles/mos_cv.dir/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c.o:
 
 /usr/lib64/libc_nonshared.a:
 
@@ -203,21 +271,31 @@ CMakeFiles/mos_cv.dir/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/libgcc.a:
 
-/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o:
-
 /usr/lib64/libm.so:
-
-/usr/lib64/crt1.o:
-
-CMakeFiles/mos_cv.dir/parameter_fetch/parameter-fetch.c.o:
-
-/lib64/libgcc_s.so.1:
-
-/lib64/libc.so.6:
 
 CMakeFiles/mos_cv.dir/main.c.o:
 
 /lib64/ld-linux-x86-64.so.2:
+
+/home/sarthak/Documents/mos-cv/solve_c/solve_c.c:
+
+/usr/lib/gcc/x86_64-redhat-linux/15/crtend.o:
+
+/usr/include/strings.h:
+
+/lib64/libc.so.6:
+
+/usr/include/bits/types/locale_t.h:
+
+/usr/include/bits/types/__locale_t.h:
+
+/lib64/libgcc_s.so.1:
+
+/home/sarthak/Documents/mos-cv/parameter_fetch/parameter_fetch.c:
+
+/usr/lib64/crt1.o:
+
+/home/sarthak/Documents/mos-cv/solve_c/solve_c.h:
 
 /home/sarthak/Documents/mos-cv/main.h:
 
@@ -234,6 +312,10 @@ CMakeFiles/mos_cv.dir/main.c.o:
 /usr/include/sys/cdefs.h:
 
 /usr/include/stdlib.h:
+
+/home/sarthak/Documents/mos-cv/poisson/poisson.c:
+
+/usr/include/gnu/stubs-64.h:
 
 /usr/include/bits/stdio.h:
 
@@ -283,27 +365,33 @@ CMakeFiles/mos_cv.dir/main.c.o:
 
 /usr/include/bits/types/struct_FILE.h:
 
+/usr/include/bits/mathcalls.h:
+
+/home/sarthak/Documents/mos-cv/carrier_continuity/carrier.h:
+
+/usr/include/bits/endianness.h:
+
+/usr/include/bits/libm-simd-decl-stubs.h:
+
+/usr/include/bits/floatn-common.h:
+
 /usr/include/alloca.h:
 
 /usr/include/bits/types/__sigset_t.h:
 
 /usr/include/bits/waitflags.h:
 
-/usr/include/bits/libm-simd-decl-stubs.h:
-
-/usr/include/bits/endianness.h:
-
 /usr/include/bits/byteswap.h:
 
 /usr/lib64/libc.so:
 
+/usr/include/string.h:
+
 /usr/include/bits/time64.h:
 
-/usr/include/bits/mathcalls.h:
-
-/usr/include/bits/floatn-common.h:
-
 /usr/include/bits/pthreadtypes.h:
+
+CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o:
 
 /usr/include/bits/floatn.h:
 
@@ -320,10 +408,6 @@ CMakeFiles/mos_cv.dir/poisson/poisson.c.o:
 /lib64/libmvec.so.1:
 
 /usr/include/bits/struct_mutex.h:
-
-/home/sarthak/Documents/mos-cv/poisson/poisson.c:
-
-/usr/include/gnu/stubs-64.h:
 
 /usr/include/bits/thread-shared-types.h:
 

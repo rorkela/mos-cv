@@ -225,6 +225,30 @@ poisson/poisson.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/poisson/poisson.c.s
 .PHONY : poisson/poisson.c.s
 
+solve_c/solve_c.o: solve_c/solve_c.c.o
+.PHONY : solve_c/solve_c.o
+
+# target to build an object file
+solve_c/solve_c.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o
+.PHONY : solve_c/solve_c.c.o
+
+solve_c/solve_c.i: solve_c/solve_c.c.i
+.PHONY : solve_c/solve_c.i
+
+# target to preprocess a source file
+solve_c/solve_c.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/solve_c/solve_c.c.i
+.PHONY : solve_c/solve_c.c.i
+
+solve_c/solve_c.s: solve_c/solve_c.c.s
+.PHONY : solve_c/solve_c.s
+
+# target to generate assembly for a file
+solve_c/solve_c.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/solve_c/solve_c.c.s
+.PHONY : solve_c/solve_c.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -246,6 +270,9 @@ help:
 	@echo "... poisson/poisson.o"
 	@echo "... poisson/poisson.i"
 	@echo "... poisson/poisson.s"
+	@echo "... solve_c/solve_c.o"
+	@echo "... solve_c/solve_c.i"
+	@echo "... solve_c/solve_c.s"
 .PHONY : help
 
 

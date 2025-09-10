@@ -85,12 +85,12 @@ clean: CMakeFiles/mos_cv.dir/clean
 CMakeFiles/mos_cv.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sarthak/Documents/mos-cv/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target mos_cv"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sarthak/Documents/mos-cv/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target mos_cv"
 .PHONY : CMakeFiles/mos_cv.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mos_cv.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sarthak/Documents/mos-cv/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sarthak/Documents/mos-cv/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mos_cv.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/sarthak/Documents/mos-cv/build/CMakeFiles 0
 .PHONY : CMakeFiles/mos_cv.dir/rule
@@ -102,7 +102,7 @@ mos_cv: CMakeFiles/mos_cv.dir/rule
 # codegen rule for target.
 CMakeFiles/mos_cv.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sarthak/Documents/mos-cv/build/CMakeFiles --progress-num=1,2,3,4,5 "Finished codegen for target mos_cv"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/sarthak/Documents/mos-cv/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Finished codegen for target mos_cv"
 .PHONY : CMakeFiles/mos_cv.dir/codegen
 
 # clean rule for target.

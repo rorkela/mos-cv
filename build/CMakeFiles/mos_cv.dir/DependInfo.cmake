@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/sarthak/Documents/mos-cv/main.c" "CMakeFiles/mos_cv.dir/main.c.o" "gcc" "CMakeFiles/mos_cv.dir/main.c.o.d"
   "/home/sarthak/Documents/mos-cv/parameter_fetch/parameter_fetch.c" "CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o" "gcc" "CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o.d"
   "/home/sarthak/Documents/mos-cv/poisson/poisson.c" "CMakeFiles/mos_cv.dir/poisson/poisson.c.o" "gcc" "CMakeFiles/mos_cv.dir/poisson/poisson.c.o.d"
+  "/home/sarthak/Documents/mos-cv/solve_c/solve_c.c" "CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o" "gcc" "CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o.d"
   "" "mos_cv" "gcc" "CMakeFiles/mos_cv.dir/link.d"
   )
 

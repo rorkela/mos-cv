@@ -8,7 +8,7 @@ void init_default_parameters(void) {
     mos.area    = 1e-8;
     mos.height  = 1e-6;
     mos.nz=100;
-
+    mos.dx=mos.height/(mos.nz-1);
     mos.eps_oxide = 3.9 * 8.854e-12;
     mos.eps_si    = 11.68 * 8.854e-12;
     mos.Na = 1e23;

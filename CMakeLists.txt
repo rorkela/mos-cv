@@ -11,6 +11,7 @@ set(SRC_FILES
     parameter_fetch/parameter_fetch.c
     carrier_continuity/carrier.c
     poisson/poisson.c
+    solve_c/solve_c.c
 )
 
 # Create executable

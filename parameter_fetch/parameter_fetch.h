@@ -1,10 +1,12 @@
 #ifndef PARAMETER
 #define PARAMETER
+#define kB 8.617333262e-5
 struct parameter {
     double t_oxide;//Thickness of oxide. Again not needed ig
     double area;//Area of mos(not needed ig. sir said unit area)
     double height; //Height of mesh
-    int nz; //Meshing points. 
+    int nz; //Meshing points.
+    double dx;
 
     double eps_oxide;
     double eps_si;
