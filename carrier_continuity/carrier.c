@@ -4,7 +4,7 @@
 #include "../parameter_fetch/parameter_fetch.h"
 #include "carrier.h"
 #define B(z) (z)/(exp((z))-1)
-void carrier_continuity(double * V, double * nprev, double * pprev, double * n, double * p, int N)
+void carrier_continuity(double * V, double * Vprev, double * nprev, double * pprev, double * n, double * p, int N)
 {
     // Newton Rhapson used
     // Jac is Jacobian
@@ -16,9 +16,9 @@ void carrier_continuity(double * V, double * nprev, double * pprev, double * n, 
     double *Jp=malloc((N-1)*sizeof(double));
     double *Jnprev=malloc((N-1)*sizeof(double));
     double *Jn=malloc((N-1)*sizeof(double));
-    compute_J(Jpprev,V,pprev,mos.mu_p,N);
+    compute_J(Jpprev,Vprev,pprev,mos.mu_p,N);
     compute_J(Jp,V,p,mos.mu_p,N);
-    compute_J(Jnprev,V,nprev,mos.mu_n,N);
+    compute_J(Jnprev,Vprev,nprev,mos.mu_n,N);
     compute_J(Jn,V,n,mos.mu_n,N);
     free(Jpprev);
     free(Jp);
