@@ -17,7 +17,7 @@ void poisson(double *V, double *n, double *p, double *permittivity,
   int N = mos.nz;
   double dx = mos.dx;
   int i, j;
-  int iter=MAX_ITER;
+  int iter = MAX_ITER;
   // NOTE: Think of Jx=F where J is jacobian, X is update, F is -F(x) (- is
   // embedded inside beforehand for convenience) Since J is tridiagonal, i store
   // it in a Nx3 matrix. Saves time and space.
@@ -42,9 +42,9 @@ void poisson(double *V, double *n, double *p, double *permittivity,
   for (i = 0; i < N; i++)
     Fnorm = fmax(Fnorm, fabs(F[i]));
   do {
-    //Setting boundary conditions
-    V[0]=Vbound1;
-    V[N-1]=Vbound2;
+    // Setting boundary conditions
+    V[0] = Vbound1;
+    V[N - 1] = Vbound2;
     J[0 * 3 + 1] = 1;
     J[(N - 1) * 3 + 1] = 1;
     J[0 * 3 + 0] = J[0 * 3 + 2] = 0;
@@ -78,7 +78,7 @@ void poisson(double *V, double *n, double *p, double *permittivity,
     }
     F[0] = 0;
     F[N - 1] = 0;
-    Fnorm_prev=Fnorm;
+    Fnorm_prev = Fnorm;
     for (int i = 1; i < N - 1; i++) {
       F[i] = -(1 / (2 * dx * dx) *
                    ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
@@ -88,8 +88,8 @@ void poisson(double *V, double *n, double *p, double *permittivity,
                     (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
                q * (mos.Nd - mos.Na - n[i] + p[i]));
     }
-    //Computing norm for stopping in convergence
-    Fnorm=0;
+    // Computing norm for stopping in convergence
+    Fnorm = 0;
     for (i = 0; i < N; i++)
       Fnorm = fmax(Fnorm, fabs(F[i]));
 
