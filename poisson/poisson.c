@@ -1,45 +1,104 @@
+#include "../parameter_fetch/parameter_fetch.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include "../parameter_fetch/parameter_fetch.h"
-#define map(x,y) (x)*n+(y)
-double* poisson(double * conc, double Vapp1,double Vapp2)
-{
-	int n=mos.nz;
-	double dx=mos.dx;
-	int i,j;
-	// NOTE: Think of matrix Ax=B where x=potentials
-	double *A = calloc(n * 3, sizeof(double));
-	A[0*3+1]=1;
-	A[(n-1)*3+1]=1;
-	for (i=1;i<n-1;i++)
-	{
-		A[i*3]=(mos.eps_si)/(dx*dx);
-		A[i*3+1]=-(2*mos.eps_si)/(dx*dx);
-		A[i*3+2]=(mos.eps_si)/(dx*dx);
-	}
-	double *B=malloc(n*sizeof(double));
-	B[0]=Vapp1;
-	B[n-1]=Vapp2;
-	for (int i=1;i<n-1;i++) B[i]=conc[i];
-	// NOTE: To solve this matrix Ax=B, LU decomposition can be used. However this is tridiagonal so Thomas algorithm gives O(n) time complexity.
-	double *C=malloc(n*sizeof(double));
-	double *D=malloc(n*sizeof(double));
-	C[0]=A[2]/A[1];
-	D[0]=B[0]/A[1];
-	for (i=1;i<n;i++)
-	{
-		C[i]=A[i*3+2]/(A[i*3+1]-A[i*3]*C[i-1]);
-		D[i]=(B[i]-A[i*3]*D[i-1])/(A[i*3+1]-A[i*3]*C[i-1]);
-	}
-	free(B);
-	free(A);
-	double *X = malloc(n*sizeof(double));
-	X[n-1]=D[n-1];
-	for(i=n-2;i>=0;i--)
-	{
-		X[i]=D[i]-C[i]*X[i+1];
-	}
-	return X;
-}
+#define MAX_ITER 10
+#define map(x, y) (x) * n + (y)
+/* This one will use newton rhapson to solve.
+ * Takes input as
+ * V - Voltage array and with initial guess supplied.
+ * n - conc at that time instant
+ * p - conc at that time instant
+ * permittivity - permittivity of medium
+ * Vbound1 and Vbound2 - Drichlet boundary
+ * Updates V till convergence. After convergence exits.*/
+void poisson(double *V, double *n, double *p, double *permittivity,
+             double Vbound1, double Vbound2) {
+  int N = mos.nz;
+  double dx = mos.dx;
+  int i, j;
+  int iter=MAX_ITER;
+  // NOTE: Think of Jx=F where J is jacobian, X is update, F is -F(x) (- is
+  // embedded inside beforehand for convenience) Since J is tridiagonal, i store
+  // it in a Nx3 matrix. Saves time and space.
+  double *J = calloc(N * 3, sizeof(double));
+  double *X = malloc(N * sizeof(double));
+  double *F = malloc(N * sizeof(double));
+  double *C = malloc(N * sizeof(double));
+  double *D = malloc(N * sizeof(double));
+  double Fnorm = 0;
+  double Fnorm_prev = 0;
+  // Initializting residual
+  F[0] = 0;
+  F[N - 1] = 0;
+  for (int i = 1; i < N - 1; i++)
+    F[i] = -(1 / (2 * dx * dx) *
+                 ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
+                  (2 * permittivity[i] + permittivity[i + 1] +
+                   permittivity[i - 1]) *
+                      V[i] +
+                  (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
+             q * (mos.Nd - mos.Na - n[i] + p[i]));
+  for (i = 0; i < N; i++)
+    Fnorm = fmax(Fnorm, fabs(F[i]));
+  do {
+    //Setting boundary conditions
+    V[0]=Vbound1;
+    V[N-1]=Vbound2;
+    J[0 * 3 + 1] = 1;
+    J[(N - 1) * 3 + 1] = 1;
+    J[0 * 3 + 0] = J[0 * 3 + 2] = 0;
+    J[(N - 1) * 3 + 0] = J[(N - 1) * 3 + 2] = 0;
+    for (i = 1; i < N - 1; i++) {
+      J[i * 3] = (permittivity[i] + permittivity[i - 1]) / (2 * dx * dx);
+      J[i * 3 + 1] =
+          -(2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) /
+              (2 * dx * dx) -
+          q * q * (p[i] + n[i]) / (kB * mos.T);
+      J[i * 3 + 2] = (permittivity[i] + permittivity[i + 1]) / (2 * dx * dx);
+    }
 
+    // NOTE: To solve this matrix Ax=B, LU decomposition can be used. However
+    // this is tridiagonal so Thomas algorithm gives O(n) time complexity.
+    C[0] = J[2] / J[1];
+    D[0] = F[0] / J[1];
+    for (i = 1; i < N; i++) {
+      C[i] = J[i * 3 + 2] / (J[i * 3 + 1] - J[i * 3] * C[i - 1]);
+      D[i] =
+          (F[i] - J[i * 3] * D[i - 1]) / (J[i * 3 + 1] - J[i * 3] * C[i - 1]);
+    }
+    X[N - 1] = D[N - 1];
+    for (i = N - 2; i >= 0; i--) {
+      X[i] = D[i] - C[i] * X[i + 1];
+    }
+    for (int i = 1; i < N - 1; i++) // Not accounting for boundary conditions.
+                                    // So loop starts at 1 and ends at N-2
+    {
+      V[i] += X[i];
+    }
+    F[0] = 0;
+    F[N - 1] = 0;
+    Fnorm_prev=Fnorm;
+    for (int i = 1; i < N - 1; i++) {
+      F[i] = -(1 / (2 * dx * dx) *
+                   ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
+                    (2 * permittivity[i] + permittivity[i + 1] +
+                     permittivity[i - 1]) *
+                        V[i] +
+                    (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
+               q * (mos.Nd - mos.Na - n[i] + p[i]));
+    }
+    //Computing norm for stopping in convergence
+    Fnorm=0;
+    for (i = 0; i < N; i++)
+      Fnorm = fmax(Fnorm, fabs(F[i]));
+
+    if (Fnorm / Fnorm_prev < 0.01)
+      break;
+  } while (iter--);
+  free(J);
+  free(X);
+  free(F);
+  free(C);
+  free(D);
+}
