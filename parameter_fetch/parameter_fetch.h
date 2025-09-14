@@ -30,6 +30,7 @@ struct sim_arrays  {
     double * Nd; //donor doping
     double * Na; //acceptor doping
     double *perm; //permittivity
+    double dt;
 };
 extern struct sim_arrays sim;
 extern struct parameter mos;

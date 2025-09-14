@@ -63,6 +63,7 @@ void init_params()
     sim.Na=malloc(mos.nz*sizeof(double));
     sim.Nd=malloc(mos.nz*sizeof(double));
     mos.dx=(mos.t_semi+mos.t_oxide)/(mos.nz-1);
+    sim.dt=1;
     for(int i=0;i<mos.nz;i++)
     {
         if(mos.dx*i<=mos.t_oxide) 
