@@ -20,6 +20,7 @@ void carrier_continuity(double * V, double * Vprev, double * nprev, double * ppr
     compute_J(Jp,V,p,mos.mu_p,N);
     compute_J(Jnprev,Vprev,nprev,mos.mu_n,N);
     compute_J(Jn,V,n,mos.mu_n,N);
+
     free(Jpprev);
     free(Jp);
     free(Jnprev);

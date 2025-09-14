@@ -7,6 +7,7 @@
 int main()
 {
     init_default_parameters();
+    init_params();
     print_parameters();
     int N=mos.nz;
 

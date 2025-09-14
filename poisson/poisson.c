@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX_ITER 10
-#define map(x, y) (x) * n + (y)
 /* This one will use newton rhapson to solve.
  * Takes input as
  * V - Voltage array and with initial guess supplied.
@@ -12,9 +11,12 @@
  * permittivity - permittivity of medium
  * Vbound1 and Vbound2 - Drichlet boundary
  * Updates V till convergence. After convergence exits.*/
-void poisson(double *V, double *n, double *p, double *permittivity,
+void poisson(double *V, double *n, double *p, 
              double Vbound1, double Vbound2) {
   int N = mos.nz;
+  double *permittivity=sim.perm;
+  double *Nd=sim.Nd;
+  double *Na=sim.Na;
   double dx = mos.dx;
   int i, j;
   int iter = MAX_ITER;
@@ -38,7 +40,7 @@ void poisson(double *V, double *n, double *p, double *permittivity,
                    permittivity[i - 1]) *
                       V[i] +
                   (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
-             q * (mos.Nd - mos.Na - n[i] + p[i]));
+             q * (Nd[i] - Na[i] - n[i] + p[i]));
   for (i = 0; i < N; i++)
     Fnorm = fmax(Fnorm, fabs(F[i]));
   do {
@@ -86,7 +88,7 @@ void poisson(double *V, double *n, double *p, double *permittivity,
                      permittivity[i - 1]) *
                         V[i] +
                     (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
-               q * (mos.Nd - mos.Na - n[i] + p[i]));
+               q * (Nd[i] - Na[i] - n[i] + p[i]));
     }
     // Computing norm for stopping in convergence
     Fnorm = 0;

@@ -1,14 +1,14 @@
 #include "parameter_fetch.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 struct parameter mos;
-
+struct sim_arrays sim;
 void init_default_parameters(void) {
     mos.t_oxide = 5e-9 ;
     mos.area    = 1e-8;
-    mos.height  = 1e-6;
+    mos.t_semi  = 1e-8;
     mos.nz=100;
-    mos.dx=mos.height/(mos.nz-1);
     mos.eps_oxide = 3.9 * 8.854e-12;
     mos.eps_si    = 11.68 * 8.854e-12;
     mos.Na = 1e23;
@@ -38,7 +38,7 @@ int load_parameters_from_file(const char *fname) {
     while (fscanf(fp, "%63s %lf", name, &value) == 2) {
         if (strcmp(name, "t_oxide") == 0) mos.t_oxide = value;
         else if (strcmp(name, "area") == 0) mos.area = value;
-        else if (strcmp(name, "height") == 0) mos.height = value;
+        else if (strcmp(name, "height") == 0) mos.t_semi = value;
         else if (strcmp(name, "eps_oxide") == 0) mos.eps_oxide = value;
         else if (strcmp(name, "eps_si") == 0) mos.eps_si = value;
         else if (strcmp(name, "Na") == 0) mos.Na = value;
@@ -57,12 +57,33 @@ int load_parameters_from_file(const char *fname) {
     fclose(fp);
     return 0;
 }
-
+void init_params()
+{
+    sim.perm=malloc(mos.nz*sizeof(double));
+    sim.Na=malloc(mos.nz*sizeof(double));
+    sim.Nd=malloc(mos.nz*sizeof(double));
+    mos.dx=(mos.t_semi+mos.t_oxide)/(mos.nz-1);
+    for(int i=0;i<mos.nz;i++)
+    {
+        if(mos.dx*i<=mos.t_oxide) 
+        {
+            sim.Na[i]=0;
+            sim.Nd[i]=0;
+            sim.perm[i]=mos.eps_oxide;
+        }
+        else
+        {
+            sim.Na[i]=mos.Na;
+            sim.Nd[i]=mos.Nd;
+            sim.perm[i]=mos.eps_si;
+        }
+    }
+}
 void print_parameters(void) {
     printf("MOSCAP parameters:\n");
     printf("  t_oxide   = %g m\n", mos.t_oxide);
     printf("  area      = %g m^2\n", mos.area);
-    printf("  height    = %g m\n", mos.height);
+    printf("  height    = %g m\n", mos.t_semi);
     printf("  eps_oxide = %g F/m\n", mos.eps_oxide);
     printf("  eps_si    = %g F/m\n", mos.eps_si);
     printf("  Na        = %g m^-3\n", mos.Na);

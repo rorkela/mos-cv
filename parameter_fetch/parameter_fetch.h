@@ -4,8 +4,8 @@
 #define q 1.6e-19
 struct parameter {
     double t_oxide;//Thickness of oxide. Again not needed ig
-    double area;//Area of mos(not needed ig. sir said unit area)
-    double height; //Height of mesh
+    double area;//Area of mos(not needed ig. professor said unit area)
+    double t_semi; //Height of mesh
     int nz; //Meshing points.
     double dx;
 
@@ -26,8 +26,15 @@ struct parameter {
 
     // add more as needed...
 };
+struct sim_arrays  {
+    double * Nd; //donor doping
+    double * Na; //acceptor doping
+    double *perm; //permittivity
+};
+extern struct sim_arrays sim;
 extern struct parameter mos;
 void init_default_parameters(void);
 int load_parameters_from_file(const char *fname); //Doesnt input everything yet. Use default parameters
 void print_parameters(void); 
+void init_params();
 #endif
