@@ -18,7 +18,7 @@ def B(psi):
 # Scharfetter-Gummel flux between node i and j (using node i on left, j on right)
 def J(n_i, n_j, phi_i, phi_j,u):
     psi = (phi_j - phi_i)
-    return (k*T*u/dx) * ( B(psi)*n_i - B(-psi)*n_j )
+    return (k*T*u/dx) * ( B(psi)*n_j - B(-psi)*n_i )
 nF1=(J(n1,n2,V1,V2,un)-J(n0,n1,V0,V1,un))/q + G - n1*p1+ni**2
 nF2=(J(nprev1,nprev2,Vprev1,Vprev2,un)-J(nprev0,nprev1,Vprev0,Vprev1,un))/q + G - nprev1*pprev1+ni**2
 nF=(n1-nprev1)/dt - (nF1+nF2)/2

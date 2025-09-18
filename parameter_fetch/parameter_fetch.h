@@ -2,6 +2,7 @@
 #define PARAMETER
 #define kB 8.617333262e-5
 #define q 1.6e-19
+#define IN_OX(i) (i)*mos.dx<=mos.t_oxide
 struct parameter {
     double t_oxide;//Thickness of oxide. Again not needed ig
     double area;//Area of mos(not needed ig. professor said unit area)

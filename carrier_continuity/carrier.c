@@ -9,36 +9,11 @@ void carrier_continuity(double * V, double * Vprev, double * nprev, double * ppr
     // Newton Rhapson used
     // Jac is Jacobian
     // F  is the value of function from initial guess 
-    double *Jac=calloc(6*N,sizeof(double));
-    double *F=malloc(2*N*sizeof(double));
-    // initializing current
-    double *Jpprev=malloc((N-1)*sizeof(double));
-    double *Jp=malloc((N-1)*sizeof(double));
-    double *Jnprev=malloc((N-1)*sizeof(double));
-    double *Jn=malloc((N-1)*sizeof(double));
-    compute_J(Jpprev,Vprev,pprev,mos.mu_p,N);
-    compute_J(Jp,V,p,mos.mu_p,N);
-    compute_J(Jnprev,Vprev,nprev,mos.mu_n,N);
-    compute_J(Jn,V,n,mos.mu_n,N);
-    for(int i=0;i<N;i++)
-    {
-        if(mos.dx*i<=mos.t_oxide)
-        {
-            F[2*i]=((n[i]-nprev[i])/sim.dt);
-            F[2*i+1]=0;
-        }
-        else
-        {
-            //for electron carriers
-            //for hole carriers
-        }
-        
-    }
-
-    free(Jpprev);
-    free(Jp);
-    free(Jnprev);
-    free(Jn);
+    double *Jac=calloc(3*N,sizeof(double));
+    double *F=malloc(N*sizeof(double));
+    //Solving for n
+    compute_F(F,V,Vprev,nprev,pprev,n,p,N,1);
+    compute_F(F,V,Vprev,nprev,pprev,n,p,N,0);
     free(Jac);
     free(F);
 }
@@ -51,4 +26,30 @@ void compute_J(double *J, double *V, double *n,double u, int N)
         J[i]=(kB*mos.T/mos.dx)*u*B(V[i+1]-V[i])*(n[i+1]-n[i]*exp(V[i+1]-V[i]));
     }
     return;
+}
+// INCOMPLETE
+void compute_F(double *F, double * V, double * Vprev, double *nprev, double *pprev, double * n, double * p, int N, int is_n)
+{
+    double u=mos.mu_p;
+    double qfact=1;
+    double F1=0;
+    double F2=0;
+    double J0=0;
+    double J1=0;
+    if(is_n==1)
+    {
+        u=mos.mu_n;
+        qfact=-1;
+    }
+    for(int i=0;i<N;i++)
+    {
+        if(IN_OX(i))
+        {
+            F[i]=0;
+        }
+        else
+        {
+            J0=(kB*mos.T/mos.dx)*u*B(V[i+1]-V[i])*(n[i+1]-n[i]*exp(V[i+1]-V[i]));
+        }
+    }
 }

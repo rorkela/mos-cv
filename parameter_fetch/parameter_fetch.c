@@ -66,7 +66,7 @@ void init_params()
     sim.dt=1;
     for(int i=0;i<mos.nz;i++)
     {
-        if(mos.dx*i<=mos.t_oxide) 
+        if(IN_OX(i)) 
         {
             sim.Na[i]=0;
             sim.Nd[i]=0;
