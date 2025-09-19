@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = 
 
-C_FLAGS =  -Wall -O2
+C_FLAGS =  -Wall -O2 -g
 
