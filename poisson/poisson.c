@@ -1,7 +1,4 @@
-#include "../parameter_fetch/parameter_fetch.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "../main.h"
 #define MAX_ITER 10
 /* This one will use newton rhapson to solve.
  * Takes input as

@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include "../parameter_fetch/parameter_fetch.h"
-#include "carrier.h"
+#include "../main.h"
 #define B(z) (z)/(exp((z))-1)
 void carrier_continuity(double * V, double * Vprev, double * nprev, double * pprev, double * n, double * p, int N)
 {

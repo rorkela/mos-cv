@@ -1,7 +1,4 @@
-#include "parameter_fetch.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "../main.h"
 struct parameter mos;
 struct sim_arrays sim;
 void init_default_parameters(void) {

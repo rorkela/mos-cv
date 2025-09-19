@@ -1,10 +1,11 @@
 #ifndef MAINH
 #define MAINH
-//To store the input parameters for voltage. 
-//V=V.bias+V.sin*sin(2*M_PI*f*T);
-struct signal{
-    double bias; //Voltage bias
-    double sin; //Amplitude of sine
-    double f; //Frequency of sine
-};
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include "parameter_fetch/parameter_fetch.h"
+#include "carrier_continuity/carrier.h"
+#include "poisson/poisson.h"
+#include "solve_c/solve_c.h"
 #endif

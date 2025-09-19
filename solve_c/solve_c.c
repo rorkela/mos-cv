@@ -1,4 +1,4 @@
-#include "solve_c.h"
+#include "../main.h"
 double solve_c(struct signal Vin)
 {
     // Generating initial value for n and p
