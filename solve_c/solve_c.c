@@ -3,7 +3,7 @@
 double solve_c(struct signal Vin)
 {
     int N=mos.nz;
-    double drichlet_factor=-1; // Fill
+    double drichlet_factor=kB*mos.T*log(mos.Nc/mos.Nd); // WARNING: Hardcoded for n doped
     double delta=0;
     int iter=0;
     // Initializing arrays for n p V and for previous time instant
@@ -25,13 +25,17 @@ double solve_c(struct signal Vin)
             n[i]=0;
             p[i]=0;
         }
-        // WARNING: Assuming this is P doped. Change here if needed. Hardcoded for now
+        // WARNING: Assuming this is n doped. Change here if needed. Hardcoded for now
         else{
-        p[i]=mos.Na; 
-        n[i]=mos.ni*mos.ni/mos.Na;
+        n[i]=mos.Nd; 
+        p[i]=mos.ni*mos.ni/mos.Nd;
         }
         V[i]=Vin.bias*(1-(double)i/(N-1)) + drichlet_factor;
     }
+    // NOTE: DEBUG
+    plotxy(sim.x, V, N);
+    printarr(sim.x,N);
+    printarr (V,N);
     //Storing copy for t=0.
     copy_arr(n,n_prev_t,N);
     copy_arr(p,p_prev_t,N);
@@ -51,6 +55,8 @@ double solve_c(struct signal Vin)
         }
         if(iter++>=MAX_ITER) break;
     }while(delta>=1e-6);
+        plotxy(sim.x, V, N);
+
     solve_charge_density(charge_density,n,p,N);
     printf("Solved");
     free(n);

@@ -12,6 +12,7 @@ set(SRC_FILES
     carrier_continuity/carrier.c
     poisson/poisson.c
     solve_c/solve_c.c
+    fileio/fileio.c
 )
 
 # Create executable

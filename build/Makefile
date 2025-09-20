@@ -153,6 +153,30 @@ carrier_continuity/carrier.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.s
 .PHONY : carrier_continuity/carrier.c.s
 
+fileio/fileio.o: fileio/fileio.c.o
+.PHONY : fileio/fileio.o
+
+# target to build an object file
+fileio/fileio.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/fileio/fileio.c.o
+.PHONY : fileio/fileio.c.o
+
+fileio/fileio.i: fileio/fileio.c.i
+.PHONY : fileio/fileio.i
+
+# target to preprocess a source file
+fileio/fileio.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/fileio/fileio.c.i
+.PHONY : fileio/fileio.c.i
+
+fileio/fileio.s: fileio/fileio.c.s
+.PHONY : fileio/fileio.s
+
+# target to generate assembly for a file
+fileio/fileio.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mos_cv.dir/build.make CMakeFiles/mos_cv.dir/fileio/fileio.c.s
+.PHONY : fileio/fileio.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -261,6 +285,9 @@ help:
 	@echo "... carrier_continuity/carrier.o"
 	@echo "... carrier_continuity/carrier.i"
 	@echo "... carrier_continuity/carrier.s"
+	@echo "... fileio/fileio.o"
+	@echo "... fileio/fileio.i"
+	@echo "... fileio/fileio.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

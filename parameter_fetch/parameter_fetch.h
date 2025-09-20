@@ -23,7 +23,9 @@ struct parameter {
     double Nd; //Doping conc
     double mu_n;// Mobility of n in silicon
     double mu_p; //Mobility of p in silicon
-    double ni;
+    double ni; //Intrinsic Carrier Concentration
+    double Nc; //Effective DOS in CB
+    double Nv; //Effective DOS in VB
 
     double Vg;
     double Vfb;
@@ -39,6 +41,7 @@ struct sim_arrays  {
     double * Na; //acceptor doping
     double *perm; //permittivity
     double dt;
+    double * x;
 };
 extern struct sim_arrays sim;
 extern struct parameter mos;

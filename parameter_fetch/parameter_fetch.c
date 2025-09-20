@@ -8,11 +8,13 @@ void init_default_parameters(void) {
     mos.nz=100;
     mos.eps_oxide = 3.9 * 8.854e-12;
     mos.eps_si    = 11.68 * 8.854e-12;
-    mos.Na = 1e23;
-    mos.Nd = 0;
+    mos.Na = 0;
+    mos.Nd = 1e23;
     mos.ni=1.45e10;
     mos.mu_n = 0.135;
     mos.mu_p = 0.045;
+    mos.Nv=1.8e25;
+    mos.Nc=3.2e25;
 
     mos.Vg  = 0.0;
     mos.Vfb = -0.2;
@@ -59,6 +61,7 @@ void init_params()
     sim.perm=malloc(mos.nz*sizeof(double));
     sim.Na=malloc(mos.nz*sizeof(double));
     sim.Nd=malloc(mos.nz*sizeof(double));
+    sim.x=malloc(mos.nz*sizeof(double));
     mos.dx=(mos.t_semi+mos.t_oxide)/(mos.nz-1);
     sim.dt=1;
     for(int i=0;i<mos.nz;i++)
@@ -75,6 +78,7 @@ void init_params()
             sim.Nd[i]=mos.Nd;
             sim.perm[i]=mos.eps_si;
         }
+        sim.x[i]=i*mos.dx;
     }
 }
 void print_parameters(void) {
