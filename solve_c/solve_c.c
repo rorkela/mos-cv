@@ -34,8 +34,6 @@ double solve_c(struct signal Vin)
     }
     // NOTE: DEBUG
     plotxy(sim.x, V, N);
-    printarr(sim.x,N);
-    printarr (V,N);
     //Storing copy for t=0.
     copy_arr(n,n_prev_t,N);
     copy_arr(p,p_prev_t,N);

@@ -91,9 +91,9 @@ void poisson(double *V, double *n, double *p,
     Fnorm = 0;
     for (i = 0; i < N; i++)
       Fnorm = fmax(Fnorm, fabs(F[i]));
-
-    if (Fnorm / Fnorm_prev < 0.01)
-      break;
+    plotxy(sim.x, V, N);
+    //if (Fnorm / Fnorm_prev < 1e-6)
+      //break;
   } while (iter--);
   free(J);
   free(X);
