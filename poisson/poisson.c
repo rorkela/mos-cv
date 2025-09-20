@@ -1,5 +1,5 @@
 #include "../main.h"
-#define MAX_ITER 10
+#define MAX_ITER 100
 /* This one will use newton rhapson to solve.
  * Takes input as
  * V - Voltage array and with initial guess supplied.
@@ -8,15 +8,14 @@
  * permittivity - permittivity of medium
  * Vbound1 and Vbound2 - Drichlet boundary
  * Updates V till convergence. After convergence exits.*/
-void poisson(double *V, double *n, double *p, 
-             double Vbound1, double Vbound2) {
+void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
   int N = mos.nz;
-  double *permittivity=sim.perm;
-  double *Nd=sim.Nd;
-  double *Na=sim.Na;
+  double *permittivity = sim.perm;
+  double *Nd = sim.Nd;
+  double *Na = sim.Na;
   double dx = mos.dx;
   int i, j;
-  int iter = MAX_ITER;
+  int iter = 0;
   // NOTE: Think of Jx=F where J is jacobian, X is update, F is -F(x) (- is
   // embedded inside beforehand for convenience) Since J is tridiagonal, i store
   // it in a Nx3 matrix. Saves time and space.
@@ -33,9 +32,7 @@ void poisson(double *V, double *n, double *p,
   for (int i = 1; i < N - 1; i++)
     F[i] = -(1 / (2 * dx * dx) *
                  ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
-                  (2 * permittivity[i] + permittivity[i + 1] +
-                   permittivity[i - 1]) *
-                      V[i] +
+                  (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
                   (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
              q * (Nd[i] - Na[i] - n[i] + p[i]));
   for (i = 0; i < N; i++)
@@ -50,10 +47,8 @@ void poisson(double *V, double *n, double *p,
     J[(N - 1) * 3 + 0] = J[(N - 1) * 3 + 2] = 0;
     for (i = 1; i < N - 1; i++) {
       J[i * 3] = (permittivity[i] + permittivity[i - 1]) / (2 * dx * dx);
-      J[i * 3 + 1] =
-          -(2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) /
-              (2 * dx * dx) -
-          q * q * (p[i] + n[i]) / (kB * mos.T);
+      J[i * 3 + 1] = -(2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) / (2 * dx * dx) -
+                     q * q * (p[i] + n[i]) / (kB * mos.T);
       J[i * 3 + 2] = (permittivity[i] + permittivity[i + 1]) / (2 * dx * dx);
     }
 
@@ -63,8 +58,7 @@ void poisson(double *V, double *n, double *p,
     D[0] = F[0] / J[1];
     for (i = 1; i < N; i++) {
       C[i] = J[i * 3 + 2] / (J[i * 3 + 1] - J[i * 3] * C[i - 1]);
-      D[i] =
-          (F[i] - J[i * 3] * D[i - 1]) / (J[i * 3 + 1] - J[i * 3] * C[i - 1]);
+      D[i] = (F[i] - J[i * 3] * D[i - 1]) / (J[i * 3 + 1] - J[i * 3] * C[i - 1]);
     }
     X[N - 1] = D[N - 1];
     for (i = N - 2; i >= 0; i--) {
@@ -81,9 +75,7 @@ void poisson(double *V, double *n, double *p,
     for (int i = 1; i < N - 1; i++) {
       F[i] = -(1 / (2 * dx * dx) *
                    ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
-                    (2 * permittivity[i] + permittivity[i + 1] +
-                     permittivity[i - 1]) *
-                        V[i] +
+                    (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
                     (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
                q * (Nd[i] - Na[i] - n[i] + p[i]));
     }
@@ -91,10 +83,12 @@ void poisson(double *V, double *n, double *p,
     Fnorm = 0;
     for (i = 0; i < N; i++)
       Fnorm = fmax(Fnorm, fabs(F[i]));
-    plotxy(sim.x, V, N);
-    //if (Fnorm / Fnorm_prev < 1e-6)
-      //break;
-  } while (iter--);
+    /*if (Fnorm / Fnorm_prev < 1e-6)
+    {
+      printf("poisson.c: took %d iterations\n",iter);
+      break;
+    }*/
+  } while (iter++ <= MAX_ITER);
   free(J);
   free(X);
   free(F);
