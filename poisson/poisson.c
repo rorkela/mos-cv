@@ -97,7 +97,7 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
   free(D);
 }
 
-void thomas(double* A,double* B,int rows,double* x){
+void thomas(double* A,double* B,int N,double* x){
     // here assumed the A matrix passed to this is already compacted tridiagonal Nx3
     // B matrix should be Nx1
     // X is the update so Nx1 
