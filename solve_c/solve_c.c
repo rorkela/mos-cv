@@ -42,7 +42,6 @@ double solve_c(struct signal Vin) {
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
-
     do {
 
       copy_arr(n, n_prev, N);
@@ -68,9 +67,39 @@ double solve_c(struct signal Vin) {
     if (delta <= 5e-3)
       break; // Tolerance is 0.5% change
   }
-  plotstate(sim.x,V,n,p);
+  // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
+  tstep=0;
+  tstepmax=sim.tdiv*10;
+  Qac=Qdc;
+  while (tstep++ <= tstepmax) {
+    copy_arr(n, n_prev_t, N);
+    copy_arr(p, p_prev_t, N);
+    copy_arr(V, V_prev_t, N);
+    V[0]=Vin.bias+Vin.sin*sin(2*M_PI*(tstep/(double)sim.tdiv))+drichlet_factor;
+    do {
+
+      copy_arr(n, n_prev, N);
+      copy_arr(p, p_prev, N);
+      copy_arr(V, V_prev, N);
+      poisson(V, n, p, V[0], V[N - 1]);
+      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N,0);
+      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N,1);
+
+      // Logic for computing delta
+      delta = 0;
+      for (int i = 0; i < N; i++) {
+        compute_delta(&delta, V[i], V_prev[i]);
+        compute_delta(&delta, n[i], n_prev[i]);
+        compute_delta(&delta, p[i], p_prev[i]);
+      }
+      // if (delta <= 1e-25)
+      //   break;
+    } while (iter++ <= MAX_ITER);
+    Qac = fmax(Qac,solve_charge_density(V));
+  }
+  double c=(Qac-Qdc)/Vin.sin;
   printf("Solved\n");
   free(n);
   free(p);
@@ -81,7 +110,7 @@ double solve_c(struct signal Vin) {
   free(n_prev_t);
   free(p_prev_t);
   free(V_prev_t);
-  return 0;
+  return c;
 }
 
 double solve_charge_density(double *V) // To solve for charge density
