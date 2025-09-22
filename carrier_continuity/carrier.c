@@ -1,6 +1,6 @@
 #include "../main.h"
 #define B(z) (z) / (exp((z)) - 1)
-void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, double *n, double *p, int N) {
+void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, double *n, double *p, int N, int isforhole) {
   // Newton Rhapson used
   // Jac is Jacobian
   // F  is the value of function from initial guess

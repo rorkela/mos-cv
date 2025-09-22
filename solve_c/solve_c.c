@@ -38,8 +38,6 @@ double solve_c(struct signal Vin) {
     V[i] = Vin.bias * (1 - (double)i / (N - 1)) + drichlet_factor;
   }
   Qdc = solve_charge_density(V);
-  // NOTE: DEBUG
-  plotxy(sim.x, V, N);
   while (tstep++ <= tstepmax) {
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
@@ -64,19 +62,25 @@ double solve_c(struct signal Vin) {
       // if (delta <= 1e-25)
       //   break;
     } while (iter++ <= MAX_ITER);
-    plotxy(sim.x, V, N);
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
     if (delta <= 5e-3)
       break; // Tolerance is 0.5% change
   }
+  plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
   printf("Solved\n");
   free(n);
   free(p);
   free(V);
+  free(n_prev);
+  free(p_prev);
+  free(V_prev);
+  free(n_prev_t);
+  free(p_prev_t);
+  free(V_prev_t);
   return 0;
 }
 
