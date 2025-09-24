@@ -23,7 +23,10 @@ double solve_c(struct signal Vin) {
   double *n_prev_t = malloc(N * sizeof(double)); // n in previous time instant.
   double *p_prev_t = malloc(N * sizeof(double)); // p in previous time instant.
   double *V_prev_t = malloc(N * sizeof(double)); // V in previous time instant.
-
+  
+  // DEBUG:
+  FILE *chargedc=fopen("charge_trans_dc.txt","w");
+  FILE *chargeac=fopen("charge_trans_ac.txt","w");
   // Starting from thermal equilibrium conditions at t=0;
   for (int i = 0; i < N; i++) {
     if (IN_OX(i)) {
@@ -64,6 +67,7 @@ double solve_c(struct signal Vin) {
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
+    fprintf(chargedc,"%e\n",Qdc);
     if (delta <= 5e-3)
       break; // Tolerance is 0.5% change
   }
@@ -98,9 +102,12 @@ double solve_c(struct signal Vin) {
       //   break;
     } while (iter++ <= MAX_ITER);
     Qac = fmax(Qac,solve_charge_density(V));
+    fprintf(chargeac,"%e\n",solve_charge_density(V));
   }
   double c=(Qac-Qdc)/Vin.sin;
   printf("Solved\n");
+  fclose(chargedc);
+  fclose(chargeac);
   free(n);
   free(p);
   free(V);
