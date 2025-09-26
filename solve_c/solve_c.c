@@ -42,6 +42,7 @@ double solve_c(struct signal Vin) {
   }
   Qdc = solve_charge_density(V);
   while (tstep++ <= tstepmax) {
+    iter=0;
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
@@ -78,6 +79,7 @@ double solve_c(struct signal Vin) {
   tstepmax=sim.tdiv*10;
   Qac=Qdc;
   while (tstep++ <= tstepmax) {
+    iter=0;
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
@@ -126,7 +128,6 @@ double solve_charge_density(double *V) // To solve for charge density
 }
 
 void copy_arr(double *source, double *target, int N) {
-  for (int i = 0; i < N; i++)
-    target[i] = source[i];
+  memcpy(target,source,N*sizeof(double));
 }
 void compute_delta(double *delta, double val, double valprev) { *delta = fmax(*delta, fabs(val - valprev)); }
