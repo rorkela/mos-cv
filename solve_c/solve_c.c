@@ -43,6 +43,8 @@ double solve_c(struct signal Vin) {
   Qdc = solve_charge_density(V);
   while (tstep++ <= tstepmax) {
     iter=0;
+    printf("iter=%d",iter);
+    plotstate(sim.x,V,n,p);
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);

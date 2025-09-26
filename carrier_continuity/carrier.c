@@ -10,7 +10,6 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   double *update = malloc(N*sizeof(double));
   int maxiter=20;
   int iter=0;
-  plotxy(sim.x,p,N);
   do{
     computeJacobi_n(jac,mos.mu_n,V,p,N);
     residual_n(res, n, p, nprev, pprev, V, Vprev, mos.mu_n, N);
@@ -25,8 +24,6 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) p[i]+=update[i];
-    plotxy(sim.x,p,N);
-    getchar();
   }while(iter++<maxiter);
   free(jac);
   free(res);
