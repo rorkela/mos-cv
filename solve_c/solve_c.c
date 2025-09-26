@@ -1,5 +1,5 @@
 #include "../main.h"
-#define MAX_ITER 80
+#define MAX_ITER 20
 double solve_c(struct signal Vin) {
   int N = mos.nz;
   double drichlet_factor = kB * mos.T * log(mos.Nc / mos.Nd); // WARNING: Hardcoded for n doped
@@ -25,8 +25,8 @@ double solve_c(struct signal Vin) {
   double *V_prev_t = malloc(N * sizeof(double)); // V in previous time instant.
   
   // DEBUG:
-  FILE *chargedc=fopen("charge_trans_dc.txt","w");
-  FILE *chargeac=fopen("charge_trans_ac.txt","w");
+  //FILE *chargedc=fopen("charge_trans_dc.txt","w");
+  //FILE *chargeac=fopen("charge_trans_ac.txt","w");
   // Starting from thermal equilibrium conditions at t=0;
   for (int i = 0; i < N; i++) {
     if (IN_OX(i)) {
@@ -68,7 +68,7 @@ double solve_c(struct signal Vin) {
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
-    fprintf(chargedc,"%e\n",Qdc);
+    //fprintf(chargedc,"%e\n",Qdc);
     if (delta <= 5e-3)
       break; // Tolerance is 0.5% change
   }
@@ -76,7 +76,7 @@ double solve_c(struct signal Vin) {
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
   tstep=0;
-  tstepmax=sim.tdiv*10;
+  tstepmax=sim.tdiv*5;
   Qac=Qdc;
   while (tstep++ <= tstepmax) {
     iter=0;
@@ -104,12 +104,13 @@ double solve_c(struct signal Vin) {
       //   break;
     } while (iter++ <= MAX_ITER);
     Qac = fmax(Qac,solve_charge_density(V));
-    fprintf(chargeac,"%e\n",solve_charge_density(V));
+    //fprintf(chargeac,"%e\n",solve_charge_density(V));
+    printf("%d %d\n",iter,tstep);
   }
   double c=(Qac-Qdc)/Vin.sin;
   printf("Solved\n");
-  fclose(chargedc);
-  fclose(chargeac);
+  //fclose(chargedc);
+  //fclose(chargeac);
   free(n);
   free(p);
   free(V);
