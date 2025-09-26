@@ -10,14 +10,13 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   double *update = malloc(N*sizeof(double));
   int maxiter=20;
   int iter=0;
+  plotxy(sim.x,p,N);
   do{
     computeJacobi_n(jac,mos.mu_n,V,p,N);
     residual_n(res, n, p, nprev, pprev, V, Vprev, mos.mu_n, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) n[i]+=update[i];
-    plotxy(sim.x,n,N);
-    getchar();
   }while(iter++<maxiter);
   iter=0;
   do{
@@ -26,7 +25,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) p[i]+=update[i];
-    plotxy(sim.x,n,N);
+    plotxy(sim.x,p,N);
     getchar();
   }while(iter++<maxiter);
   free(jac);
@@ -70,7 +69,7 @@ void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
 
   for(int i=0;i<N-1;i++){
 
-    if(IN_OX(i)==1){
+    if(IN_OX(i)||i==0){
       Jac[3*i]=0;
       Jac[3*i+1]=1;
       Jac[3*i+2]=0;
@@ -113,7 +112,7 @@ void computeJacobi_p(double *Jac,double u,double *V,double *n, int N){
 
   for(int i=0;i<N-1;i++){
 
-    if(IN_OX(i)==1){
+    if(IN_OX(i)||i==0){
       Jac[3*i]=0;
       Jac[3*i+1]=1;
       Jac[3*i+2]=0;
@@ -151,7 +150,7 @@ void residual_n(double* res,double* n,double* p,double* nprev,double* pprev,doub
 
   for(int i=0;i<N;i++){
     // inside oxide and metal assumed no change in n and p and took values as zero
-    if(IN_OX(i)){
+    if(IN_OX(i)||i==0){
       res[i]=0;
     }
     
@@ -176,7 +175,7 @@ void residual_p(double* res,double* n,double* p,double* nprev,double* pprev,doub
 
   for(int i=0;i<N;i++){
     // inside oxide and metal assumed no change in n and p and took values as zero
-    if(IN_OX(i)){
+    if(IN_OX(i)||i==0){
       res[i]=0;
     }
     
