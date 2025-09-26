@@ -26,38 +26,37 @@ void printarr(double *x, int N) {
 
 void plotstate(double *x, double *V, double *n, double *p)
 {
-    int N=mos.nz;
+    int N = mos.nz;
     FILE *gp = popen("gnuplot -persistent", "w");
     if (!gp) {
         perror("gnuplot");
         return;
     }
 
-    // Use multiplot: 3 rows, 1 column
-    fprintf(gp, "set multiplot layout 3,1 title 'State Plots'\n");
-
-    // First subplot: V(x)
-    fprintf(gp, "plot '-' with linespoints title 'V(x)'\n");
+    // Define datablocks first
+    fprintf(gp, "$VDATA << EOD\n");
     for (int i = 0; i < N; i++) {
         fprintf(gp, "%e %e\n", x[i], V[i]);
     }
-    fprintf(gp, "e\n");
+    fprintf(gp, "EOD\n");
 
-    // Second subplot: n(x)
-    fprintf(gp, "plot '-' with linespoints title 'n(x)'\n");
+    fprintf(gp, "$NDATA << EOD\n");
     for (int i = 0; i < N; i++) {
         fprintf(gp, "%e %e\n", x[i], n[i]);
     }
-    fprintf(gp, "e\n");
+    fprintf(gp, "EOD\n");
 
-    // Third subplot: p(x)
-    fprintf(gp, "plot '-' with linespoints title 'p(x)'\n");
+    fprintf(gp, "$PDATA << EOD\n");
     for (int i = 0; i < N; i++) {
         fprintf(gp, "%e %e\n", x[i], p[i]);
     }
-    fprintf(gp, "e\n");
+    fprintf(gp, "EOD\n");
 
-    // End multiplot
+    // Now use multiplot with datablocks
+    fprintf(gp, "set multiplot layout 3,1 title 'State Plots'\n");
+    fprintf(gp, "plot $VDATA with linespoints title 'V(x)'\n");
+    fprintf(gp, "plot $NDATA with linespoints title 'n(x)'\n");
+    fprintf(gp, "plot $PDATA with linespoints title 'p(x)'\n");
     fprintf(gp, "unset multiplot\n");
 
     fflush(gp);
