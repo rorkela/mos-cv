@@ -140,5 +140,30 @@ void residual_n(double* res,double* n,double* p,double* nprev,double* pprev,doub
   }
 }
 
+// pass the correct u
+void residual_p(double* res,double* n,double* p,double* nprev,double* pprev,double* V,double* Vprev,double u,int N){
+  // function to return the values of residual
+  // used crank nicolson scheme for this (can be changed if not working)
+  // we need current density for this
+  double *J = malloc(N * sizeof(double));
+  compute_J(J,V,p,u,N);
+  double *Jprev = malloc(N * sizeof(double));
+  // make sure to pass the correct u
+  compute_J(Jprev,Vprev,pprev,u,N);
+
+  for(int i=0;i<N;i++){
+    // inside oxide and metal assumed no change in n and p and took values as zero
+    if(IN_OX(i)){
+      res[i]=0;
+    }
+    
+    else{
+      // sign of electron is handled
+      // WARNING: the scheme changes for the function definition of compute_J
+      res[i]=(p[i]-pprev[i])/(sim.dt) - ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr);
+    }
+  }
+}
+
 
 
