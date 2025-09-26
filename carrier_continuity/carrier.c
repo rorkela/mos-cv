@@ -16,6 +16,8 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) n[i]+=update[i];
+    plotxy(sim.x,n,N);
+    getchar();
   }while(iter++<maxiter);
   iter=0;
   do{
@@ -24,6 +26,8 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) p[i]+=update[i];
+    plotxy(sim.x,n,N);
+    getchar();
   }while(iter++<maxiter);
   free(jac);
   free(res);
@@ -32,7 +36,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
 // J[i] is current density at i+0.5.
 // WARNING: N+0.5 and -0.5 are not considered yet. I am assuming zero for now.
 void compute_J(double *J, double *V, double *n, double u, int N) {
-  for (int i = 0; i < N - 2; i++) {
+  for (int i = 0; i < N - 1; i++) {
     if(IN_OX(i))
       J[i]=0;
     else
@@ -179,7 +183,7 @@ void residual_p(double* res,double* n,double* p,double* nprev,double* pprev,doub
     else{
       // sign of electron is handled
       // WARNING: the scheme changes for the function definition of compute_J
-      res[i]=(n[i]-nprev[i])/(sim.dt) + ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr*(n[i]*p[i]/2+nprev[i]*pprev[i]/2-mos.ni*mos.ni));
+      res[i]=(p[i]-pprev[i])/(sim.dt) + ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr*(n[i]*p[i]/2+nprev[i]*pprev[i]/2-mos.ni*mos.ni));
     }
   }
   free(J);
