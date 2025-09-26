@@ -52,9 +52,7 @@ double solve_c(struct signal Vin) {
       copy_arr(p, p_prev, N);
       copy_arr(V, V_prev, N);
       poisson(V, n, p, V[0], V[N - 1]);
-      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N,0);
-      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N,1);
-
+      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
       // Logic for computing delta
       delta = 0;
       for (int i = 0; i < N; i++) {
@@ -90,8 +88,7 @@ double solve_c(struct signal Vin) {
       copy_arr(p, p_prev, N);
       copy_arr(V, V_prev, N);
       poisson(V, n, p, V[0], V[N - 1]);
-      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N,0);
-      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N,1);
+      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
 
       // Logic for computing delta
       delta = 0;
