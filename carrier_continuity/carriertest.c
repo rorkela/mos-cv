@@ -23,41 +23,122 @@ void compute_J(double *J, double *V, double *n, double u, int N) {
   return;
 }
 // unchanged above part have to fix it if needed
+
+
 // assuming the flow is V->N->P
 
 // function that takes the matrices needed and throws back the jacobi of it
 // rn this one is only for N but can be simply copied for P 
 // INCOMPLETE and dont run
-void computeJacobi_n(double *Jac,double* n,double* nprev,double* p,double* pprev,double u,double *V, double *Vprev, int N){
+// u is the mobility
+void computeJacobi_n(double *Jac,double u,double *V, double *Vprev, int N){
   // so fill the jacobi with the required derivatives
   // jacobi is Nx3 as tridiagonal and the terms will come using the other matrices
 
-  // NOTE: three things havent been considered rn
-  // 1) the boundary conditions
-  // 2) the respective jacobi entries for the metal oxide region has to be implemented
-  // 3) the term del Ri/del ni doesnt have the derivative of the generation and recombination rate wrt Ni
+  // WARNING: the term del Ri/del ni doesnt have the derivative of the generation and recombination rate wrt Ni
 
   double c=(kB*mos.T/mos.dx);
   // just put cu/q as mogger_constant
-  double mogger_constant= (c*u/q);
+  // not valid constant for a metal oxide
+  // different mogger constant for p
+  double mogger_constant= -(c*u/q);
 
-  double delta_T=;
+  double delta_T=sim.dt;
 
-  for(int i=0;i<N;i++){
+  for(int i=0;i<N-1;i++){
 
-    // DRi/Dni-1
+    if(IN_OX(i)==1){
+      Jac[3*i]=0;
+      Jac[3*i+1]=1;
+      Jac[3*i+2]=0;
+    }
+
+    else{
     Jac[3*i]= -(mogger_constant*(B(V[i]-V[i-1]) * exp(V[i]-V[i-1])));
     // DRi/Dni
+    // WARNING: recombination derivative term left
     Jac[3*i+1]= (1/delta_T) + (mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + B(V[i]-V[i-1]) )) ;
     // DRi/Dni+1
     Jac[3*i+2]= -(mogger_constant*(B(V[i+1]-V[i])));
-
-    // boundary conditions and then the metal oxide considerations
-    Jac[0]=0;//the first derivative is always zero as doesnt exist for a tri diagonal matrix
-    Jac[3*(N-1)+2]=;//ohmic boundary condition
-
+    }
 
   }
+  // boundary conditions 
+
+  Jac[0]=0;//the first derivative is always zero as doesnt exist for a tri diagonal matrix
+
+  //assumption that it is n doped  
+  //WARNING: Ohmic coundition hardcoded
+  Jac[3*(N-1)+1]=(1/delta_T) + (mogger_constant*(1+B(V[(N-1)]-V[(N-1)-1])));//ohmic boundary condition
+  Jac[3*(N-1)+2]=0;
+  Jac[3*(N-1)]= -(mogger_constant*(B(V[(N-1)]-V[(N-1)-1]) * exp(V[(N-1)]-V[(N-1)-1])));
 }
+
+void computeJacobi_p(double *Jac,double u,double *V, int N){
+  // so fill the jacobi with the required derivatives
+  // jacobi is Nx3 as tridiagonal and the terms will come using the other matrices
+
+  // WARNING: the term del Ri/del ni doesnt have the derivative of the generation and recombination rate wrt Ni
+
+  double c=(kB*mos.T/(2*mos.dx*mos.dx));
+  // just put cu/q as mogger_constant
+  // not valid constant for a metal oxide
+  // different mogger constant for p
+  double mogger_constant= (c*u/q);
+
+  double delta_T=sim.dt;
+
+  for(int i=0;i<N-1;i++){
+
+    if(IN_OX(i)==1){
+      Jac[3*i]=0;
+      Jac[3*i+1]=1;
+      Jac[3*i+2]=0;
+    }
+
+    else{
+    Jac[3*i]= -(mogger_constant*(B(V[i]-V[i-1]) * exp(V[i]-V[i-1])));
+    // DRi/Dni
+    // WARNING: recombination derivative term left
+    Jac[3*i+1]= (1/delta_T) + (mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + B(V[i]-V[i-1]) )) ;
+    // DRi/Dni+1
+    Jac[3*i+2]= -(mogger_constant*(B(V[i+1]-V[i])));
+    }
+
+  }
+  // boundary conditions 
+
+  Jac[0]=0;//the first derivative is always zero as doesnt exist for a tri diagonal matrix
+
+  //assumption that it is n doped  
+  //WARNING: Ohmic coundition hardcoded
+  Jac[3*(N-1)+1]=(1/delta_T) + (mogger_constant*(1+B(V[(N-1)]-V[(N-1)-1])));//ohmic boundary condition
+  Jac[3*(N-1)+2]=0;
+  Jac[3*(N-1)]= -(mogger_constant*(B(V[(N-1)]-V[(N-1)-1]) * exp(V[(N-1)]-V[(N-1)-1])));
+}
+
+void residual_n(double* res,double* n,double* p,double* nprev,double* pprev,double* V,double* Vprev,double u,int N){
+  // function to return the values of residual
+  // used crank nicolson scheme for this (can be changed if not working)
+  // we need current density for this
+  double *J = malloc(N * sizeof(double));
+  compute_J(J,V,n,u,N);
+  double *Jprev = malloc(N * sizeof(double));
+  compute_J(Jprev,Vprev,nprev,u,N);
+
+  for(int i=0;i<N;i++){
+    // inside oxide and metal assumed no change in n and p and took values as zero
+    if(IN_OX(i)){
+      res[i]=0;
+    }
+    
+    else{
+      // sign of electron is handled
+      // WARNING: the scheme changes for the function definition of compute_J
+      res[i]=(n[i]-nprev[i])/(sim.dt) + ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr);
+    }
+  }
+}
+
 
 
