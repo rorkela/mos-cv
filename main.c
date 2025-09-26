@@ -7,10 +7,10 @@ int main() {
   // Defining
   struct signal Vin;
   int i;
-  int dcdiv=10;
-  double Vstart=-2;
+  int dcdiv=1;
+  double Vstart=1.8;
   double Vend=2;
-  Vin.f=10000;
+  Vin.f=100;
   Vin.sin=0.01;
   double *C = malloc(dcdiv*sizeof(double));
   double *bias =malloc(dcdiv*sizeof(double));

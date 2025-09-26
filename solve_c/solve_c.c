@@ -67,6 +67,7 @@ double solve_c(struct signal Vin) {
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
     //fprintf(chargedc,"%e\n",Qdc);
+    printf("%e\n",Qdc);
     if (delta <= 5e-3)
       break; // Tolerance is 0.5% change
   }
