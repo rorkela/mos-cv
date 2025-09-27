@@ -1,6 +1,6 @@
 #include "carrier.h"
 #include "../main.h"
-#define B(z) (z) / (exp((z)) - 1)
+#define B(z) (z) / expm1((z))
 void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, double *n, double *p, int N) {
   // Newton Rhapson used
   // Jac is Jacobian
@@ -8,19 +8,23 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   double *jac = calloc(3 * N, sizeof(double));
   double *res = malloc(N * sizeof(double));
   double *update = malloc(N*sizeof(double));
+  double *Vnorm = malloc(N*sizeof(double));
+  double *Vprevnorm = malloc(N*sizeof(double));
+  for(int i=0;i<N;i++) Vnorm[i]=V[i]/(kB*mos.T/q);
+  for(int i=0;i<N;i++) Vprevnorm[i]=Vprev[i]/(kB*mos.T/q);
   int maxiter=20;
   int iter=0;
   do{
-    computeJacobi_n(jac,mos.mu_n,V,p,N);
-    residual_n(res, n, p, nprev, pprev, V, Vprev, mos.mu_n, N);
+    computeJacobi_n(jac,mos.mu_n,Vnorm,p,N);
+    residual_n(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_n, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) n[i]+=0.15*update[i];
   }while(iter++<maxiter);
   iter=0;
   do{
-    computeJacobi_p(jac,mos.mu_p,V,n,N);
-    residual_p(res, n, p, nprev, pprev, V, Vprev, mos.mu_p, N);
+    computeJacobi_p(jac,mos.mu_p,Vnorm,n,N);
+    residual_p(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_p, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) p[i]+=0.15*update[i];
@@ -28,6 +32,8 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   free(jac);
   free(res);
   free(update);
+  free(Vnorm);
+  free(Vprevnorm);
 }
 // J[i] is current density at i+0.5.
 // WARNING: N+0.5 and -0.5 are not considered yet. I am assuming zero for now.
@@ -42,14 +48,14 @@ void compute_J(double *J, double *V, double *n, double u, int N) {
   return;
 }
 
-void compute_Jp(double *J, double *V, double *n, double u, int N) {
+void compute_Jp(double *J, double *V, double *p, double u, int N) {
   for (int i = 0; i < N - 1; i++) {
     if(IN_OX(i))
       J[i]=0;
     else
-      J[i] = -((kB * mos.T / mos.dx) * u * B(V[i + 1] - V[i]) * (n[i + 1] - n[i] * exp(V[i + 1] - V[i])));
+      J[i] = -((kB * mos.T / mos.dx) * u * B(-V[i + 1] + V[i]) * (p[i + 1] - p[i] * exp(-V[i + 1] + V[i])));
   }
-  J[N-1]= -((kB * mos.T / mos.dx) * u * 1 * ( p_teq - n[N-1] * 1));
+  J[N-1]= -((kB * mos.T / mos.dx) * u * 1 * ( p_teq - p[N-1] * 1));
   return;
 }
 // unchanged above part have to fix it if needed
