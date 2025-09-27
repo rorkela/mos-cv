@@ -8,14 +8,14 @@ int main() {
   struct signal Vin;
   int i;
   int dcdiv=10;
-  double Vstart=1.9;
+  double Vstart=-1.9;
   double Vend=2;
-  Vin.f=100;
+  Vin.f=10;
   Vin.sin=0.01;
   double *C = malloc(dcdiv*sizeof(double));
   double *bias =malloc(dcdiv*sizeof(double));
   for (i=0;i<dcdiv;i++) {
-    Vin.bias=i*Vstart/dcdiv+(dcdiv-i)*Vend/dcdiv;
+    Vin.bias=i*Vend/dcdiv+(dcdiv-i)*Vstart/dcdiv;
     bias[i]=Vin.bias;
     C[i] = solve_c(Vin);
   }

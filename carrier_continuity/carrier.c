@@ -90,10 +90,10 @@ void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
     }
 
     else{
-    Jac[3*i]= -(mogger_constant*(B(V[i]-V[i-1]) * exp(V[i]-V[i-1])));
+    Jac[3*i]= (mogger_constant*(B(V[i]-V[i-1]) * exp(V[i]-V[i-1])));
     // DRi/Dni
     // WARNING: recombination derivative term left
-    Jac[3*i+1]= (1/delta_T) + (mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + B(V[i]-V[i-1]) )) + mos.C_Rr*p[i]/2 ;
+    Jac[3*i+1]= (1/delta_T) -(mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + B(V[i]-V[i-1]) )) + mos.C_Rr*p[i]/2 ;
     // DRi/Dni+1
     Jac[3*i+2]= -(mogger_constant*(B(V[i+1]-V[i])));
     }
@@ -105,9 +105,9 @@ void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
 
   //assumption that it is n doped  
   //WARNING: Ohmic coundition hardcoded
-  Jac[3*(N-1)+1]=(1/delta_T) + (mogger_constant*(1+B(V[(N-1)]-V[(N-1)-1])))+ mos.C_Rr*p[N-1]/2 ;//ohmic boundary condition
+  Jac[3*(N-1)+1]=(1/delta_T) -(mogger_constant*(1+B(V[(N-1)]-V[(N-1)-1])))+ mos.C_Rr*p[N-1]/2 ;//ohmic boundary condition
   Jac[3*(N-1)+2]=0;
-  Jac[3*(N-1)]= -(mogger_constant*(B(V[(N-1)]-V[(N-1)-1]) * exp(V[(N-1)]-V[(N-1)-1])));
+  Jac[3*(N-1)]= (mogger_constant*(B(V[(N-1)]-V[(N-1)-1]) * exp(V[(N-1)]-V[(N-1)-1])));
 }
 
 void computeJacobi_p(double *Jac,double u,double *V,double *n, int N){
@@ -133,12 +133,12 @@ void computeJacobi_p(double *Jac,double u,double *V,double *n, int N){
     }
 
     else{
-    Jac[3*i]= -(mogger_constant*(B(V[i]-V[i-1]) * exp(V[i]-V[i-1])));
+    Jac[3*i]= -(mogger_constant*(B(-V[i]+V[i-1]) * exp(-V[i]+V[i-1])));
     // DRi/Dni
     // WARNING: recombination derivative term left
-    Jac[3*i+1]= (1/delta_T) + (mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + B(V[i]-V[i-1]) )) + mos.C_Rr*n[i]/2 ;
+    Jac[3*i+1]= (1/delta_T) + (mogger_constant*( (B(-V[i+1]+V[i])*exp(-V[i+1]+V[i]) ) + B(-V[i]+V[i-1]) )) + mos.C_Rr*n[i]/2 ;
     // DRi/Dni+1
-    Jac[3*i+2]= -(mogger_constant*(B(V[i+1]-V[i])));
+    Jac[3*i+2]= -(mogger_constant*(B(-V[i+1]+V[i])));
     }
 
   }
@@ -148,9 +148,9 @@ void computeJacobi_p(double *Jac,double u,double *V,double *n, int N){
 
   //assumption that it is n doped  
   //WARNING: Ohmic coundition hardcoded
-  Jac[3*(N-1)+1]=(1/delta_T) + (mogger_constant*(1+B(V[(N-1)]-V[(N-1)-1])))+ mos.C_Rr*n[N-1]/2 ;//ohmic boundary condition
+  Jac[3*(N-1)+1]=(1/delta_T) + (mogger_constant*(1+B(-V[(N-1)]+V[(N-1)-1])))+ mos.C_Rr*n[N-1]/2 ;//ohmic boundary condition
   Jac[3*(N-1)+2]=0;
-  Jac[3*(N-1)]= -(mogger_constant*(B(V[(N-1)]-V[(N-1)-1]) * exp(V[(N-1)]-V[(N-1)-1])));
+  Jac[3*(N-1)]= -(mogger_constant*(B(-V[(N-1)]+V[(N-1)-1]) * exp(-V[(N-1)]+V[(N-1)-1])));
 }
 
 void residual_n(double* res,double* n,double* p,double* nprev,double* pprev,double* V,double* Vprev,double u,int N){
@@ -171,7 +171,7 @@ void residual_n(double* res,double* n,double* p,double* nprev,double* pprev,doub
     else{
       // sign of electron is handled
       // WARNING: the scheme changes for the function definition of compute_J
-      res[i]=(n[i]-nprev[i])/(sim.dt) + ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr*(n[i]*p[i]/2+nprev[i]*pprev[i]/2-mos.ni*mos.ni));
+      res[i]=(n[i]-nprev[i])/(sim.dt) - ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr*(n[i]*p[i]/2+nprev[i]*pprev[i]/2-mos.ni*mos.ni));
     }
   }
   free(J);

@@ -2,10 +2,10 @@
 struct parameter mos;
 struct sim_arrays sim;
 void init_default_parameters(void) {
-  mos.t_oxide = 5e-9;
+  mos.t_oxide = 2e-9;
   mos.area = 1e-8;
-  mos.t_semi = 1e-7;
-  mos.nz = 128;
+  mos.t_semi = 1e-8;
+  mos.nz = 1024;
   mos.eps_oxide = 3.9 * 8.854e-12;
   mos.eps_si = 11.68 * 8.854e-12;
   mos.Na = 0;
@@ -76,7 +76,7 @@ void init_params() {
   sim.x = malloc(mos.nz * sizeof(double));
   mos.dx = (mos.t_semi + mos.t_oxide) / (mos.nz - 1);
   sim.dt = 1;
-  sim.tdiv = 32;
+  sim.tdiv = 64;
   for (int i = 0; i < mos.nz; i++) {
     if (IN_OX(i)) {
       sim.Na[i] = 0;
