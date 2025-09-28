@@ -5,7 +5,7 @@ void init_default_parameters(void) {
   mos.t_oxide = 2e-9;
   mos.area = 1e-8;
   mos.t_semi = 1e-8;
-  mos.nz = 1024;
+  mos.nz = 2048;
   mos.eps_oxide = 3.9 * 8.854e-12;
   mos.eps_si = 11.68 * 8.854e-12;
   mos.Na = 0;
