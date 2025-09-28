@@ -28,13 +28,12 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   for(int i=0;i<N;i++) Vprevnorm[i]=Vprev[i]/(kB*mos.T/q);
   int maxiter=20;
   int iter=0;
-    plotxy(sim.x,n,N);
   do{
     computeJacobi_n(jac,mos.mu_n,Vnorm,p,N);
     residual_n(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_n, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
-    for(int i=0;i<N;i++) n[i]+=update[i];
+    for(int i=0;i<N;i++) n[i]+=0.15*update[i];
     plotxy(sim.x,n,N);
     getchar();
   }while(iter++<maxiter);
@@ -44,9 +43,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     residual_p(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_p, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
-    for(int i=0;i<N;i++) p[i]+=update[i];
-    plotxy(sim.x,p,N);
-    getchar();
+    for(int i=0;i<N;i++) p[i]+=0.15*update[i];
   }while(iter++<maxiter);
   free(jac);
   free(res);
@@ -91,7 +88,7 @@ void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
   double dx=mos.dx;
   double dt=sim.dt;
   double C = (kB * T * u) / (2.0 * q * dx * dx);
-  for(int i=0;i<N-1;i++){
+  for(int i=0;i<N;i++){
 
     if(IN_OX(i)||i==0){ //inside oxide conc is unchanging. Thus jacobian is such. Residual is zero respectively
       Jac[3*i]=0;
@@ -131,7 +128,7 @@ void computeJacobi_p(double *Jac,double u,double *V,double *n, int N){
   double dx=mos.dx;
   double dt=sim.dt;
   double C = (kB * T * u) / (2.0 * q * dx * dx);
-  for(int i=0;i<N-1;i++){
+  for(int i=0;i<N;i++){
 
     if(IN_OX(i)||i==0){ //inside oxide conc is unchanging. Thus jacobian is such. Residual is zero respectively
       Jac[3*i]=0;
