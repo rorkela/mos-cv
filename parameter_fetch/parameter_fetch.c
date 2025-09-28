@@ -76,7 +76,7 @@ void init_params() {
   sim.x = malloc(mos.nz * sizeof(double));
   mos.dx = (mos.t_semi + mos.t_oxide) / (mos.nz - 1);
   sim.dt = 1;
-  sim.tdiv = 64;
+  sim.tdiv = 32;
   for (int i = 0; i < mos.nz; i++) {
     if (IN_OX(i)) {
       sim.Na[i] = 0;

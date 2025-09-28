@@ -19,7 +19,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     residual_n(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_n, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
-    for(int i=0;i<N;i++) n[i]+=0.15*update[i];
+    for(int i=0;i<N;i++) n[i]+=update[i];
   }while(iter++<maxiter);
   iter=0;
   do{
@@ -27,7 +27,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     residual_p(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_p, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
-    for(int i=0;i<N;i++) p[i]+=0.15*update[i];
+    for(int i=0;i<N;i++) p[i]+=update[i];
   }while(iter++<maxiter);
   free(jac);
   free(res);
@@ -88,7 +88,14 @@ void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
       Jac[3*i+1]=1;
       Jac[3*i+2]=0;
     }
-
+    else if(IN_OX(i-1)){
+    Jac[3*i]=0;
+    // DRi/Dni
+    // WARNING: recombination derivative term left
+    Jac[3*i+1]= (1/delta_T) -(mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + 0*B(V[i]-V[i-1]) )) + mos.C_Rr*p[i]/2 ;
+    // DRi/Dni+1
+    Jac[3*i+2]= -(mogger_constant*(B(V[i+1]-V[i])));
+    }
     else{
     Jac[3*i]= (mogger_constant*(B(V[i]-V[i-1]) * exp(V[i]-V[i-1])));
     // DRi/Dni
@@ -131,7 +138,14 @@ void computeJacobi_p(double *Jac,double u,double *V,double *n, int N){
       Jac[3*i+1]=1;
       Jac[3*i+2]=0;
     }
-
+    else if(IN_OX(i-1)){
+    Jac[3*i]= 0;
+    // DRi/Dni
+    // WARNING: recombination derivative term left
+    Jac[3*i+1]= (1/delta_T) + (mogger_constant*( (B(-V[i+1]+V[i])*exp(-V[i+1]+V[i]) ) + 0*B(-V[i]+V[i-1]) )) + mos.C_Rr*n[i]/2 ;
+    // DRi/Dni+1
+    Jac[3*i+2]= -(mogger_constant*(B(-V[i+1]+V[i])));
+    }
     else{
     Jac[3*i]= -(mogger_constant*(B(-V[i]+V[i-1]) * exp(-V[i]+V[i-1])));
     // DRi/Dni
