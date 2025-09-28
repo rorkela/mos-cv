@@ -11,8 +11,8 @@ double solve_c(struct signal Vin) {
   double Qprev; // Temporary variable
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = sim.tdiv * 5;
-  sim.dt = 1e-20;
+  int tstepmax = 100;
+  sim.dt = 1e-18;
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
   double *p = malloc(N * sizeof(double));        // p for present computations
@@ -44,7 +44,7 @@ double solve_c(struct signal Vin) {
   while (tstep++ <= tstepmax) {
     iter=0;
     printf("iter=%d",iter);
-    plotstate(sim.x,V,n,p);
+    // plotstate(sim.x,V,n,p);
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
@@ -73,6 +73,7 @@ double solve_c(struct signal Vin) {
     //if (delta <= 5e-3)
     //  break; // Tolerance is 0.5% change
   }
+  plotstate(sim.x,V,n,p);
   // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
