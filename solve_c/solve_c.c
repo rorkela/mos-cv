@@ -12,7 +12,7 @@ double solve_c(struct signal Vin) {
   // Defining parameters for time
   int tstep = 0;
   int tstepmax = sim.tdiv * 5;
-  sim.dt = 1 / Vin.f / sim.tdiv;
+  sim.dt = 1e-20;
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
   double *p = malloc(N * sizeof(double));        // p for present computations
