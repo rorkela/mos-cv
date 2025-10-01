@@ -216,5 +216,3 @@ void residual_p(double* res,double* n,double* p,double* nprev,double* pprev,doub
   free(J);
   free(Jprev);
 }
-
-
