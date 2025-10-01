@@ -54,9 +54,9 @@ void plotstate(double *x, double *V, double *n, double *p)
 
     // Now use multiplot with datablocks
     fprintf(gp, "set multiplot layout 3,1 title 'State Plots'\n");
-    fprintf(gp, "plot $VDATA with linespoints title 'V(x)'\n");
-    fprintf(gp, "plot $NDATA with linespoints title 'n(x)'\n");
-    fprintf(gp, "plot $PDATA with linespoints title 'p(x)'\n");
+    fprintf(gp, "plot $VDATA with lines title 'V(x)'\n");
+    fprintf(gp, "plot $NDATA with lines title 'n(x)'\n");
+    fprintf(gp, "plot $PDATA with lines title 'p(x)'\n");
     fprintf(gp, "unset multiplot\n");
 
     fflush(gp);

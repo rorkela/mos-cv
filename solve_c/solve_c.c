@@ -1,5 +1,5 @@
 #include "../main.h"
-#define MAX_ITER 40
+#define MAX_ITER 10
 double solve_c(struct signal Vin) {
   int N = mos.nz;
   double drichlet_factor = kB * mos.T * log(mos.Nc / mos.Nd); // WARNING: Hardcoded for n doped
@@ -11,8 +11,8 @@ double solve_c(struct signal Vin) {
   double Qprev; // Temporary variable
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = 100;
-  sim.dt = 1e-18;
+  int tstepmax = 10;
+  sim.dt = 1e-10;
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
   double *p = malloc(N * sizeof(double));        // p for present computations
@@ -33,23 +33,23 @@ double solve_c(struct signal Vin) {
       n[i] = 0;
       p[i] = 0;
     }
-    // WARNING: Assuming this is n doped. Change here if needed. Hardcoded for now
     else {
-      n[i] = mos.Nd;
-      p[i] = mos.ni * mos.ni / mos.Nd;
+      n[i] = n_teq;
+      p[i] = p_teq;
     }
     V[i] = Vin.bias * (1 - (double)i / (N - 1)) + drichlet_factor;
   }
   Qdc = solve_charge_density(V);
+     plotstate(sim.x,V,n,p);
   while (tstep++ <= tstepmax) {
     iter=0;
     printf("iter=%d",iter);
-    // plotstate(sim.x,V,n,p);
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
     do {
 
+    printf("t=%d,iter=%d\n",tstep,iter);
       copy_arr(n, n_prev, N);
       copy_arr(p, p_prev, N);
       copy_arr(V, V_prev, N);
@@ -64,6 +64,7 @@ double solve_c(struct signal Vin) {
       }
       // if (delta <= 1e-25)
       //   break;
+      
     } while (iter++ <= MAX_ITER);
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
@@ -73,19 +74,24 @@ double solve_c(struct signal Vin) {
     //if (delta <= 5e-3)
     //  break; // Tolerance is 0.5% change
   }
+  plotxy(sim.x,V,N/20);
+  plotxy(sim.x,n,N/20);
+  plotxy(sim.x,p,N/20);
+  getchar();
   plotstate(sim.x,V,n,p);
   // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
   tstep=0;
-  tstepmax=sim.tdiv*5;
+  tstepmax=100;
   Qac=Qdc;
   while (tstep++ <= tstepmax) {
     iter=0;
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
-    V[0]=Vin.bias+Vin.sin*sin(2*M_PI*(tstep/(double)sim.tdiv))+drichlet_factor;
+    //V[0]=Vin.bias+Vin.sin*sin(2*M_PI*(tstep/(double)sim.tdiv))+drichlet_factor;
+    V[0]=Vin.bias+Vin.sin+drichlet_factor;
     do {
 
       copy_arr(n, n_prev, N);
@@ -106,7 +112,7 @@ double solve_c(struct signal Vin) {
     } while (iter++ <= MAX_ITER);
     Qac = fmax(Qac,solve_charge_density(V));
     //fprintf(chargeac,"%e\n",solve_charge_density(V));
-    printf("%d %d\n",iter,tstep);
+    printf("%lf %d\n",Qac,tstep);
   }
   double c=(Qac-Qdc)/Vin.sin;
   printf("Solved\n");

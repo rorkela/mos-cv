@@ -28,7 +28,7 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
   F[0] = 0;
   F[N - 1] = 0;
   for (int i = 1; i < N - 1; i++)
-    F[i] = (1 / (2 * dx * dx) *
+    F[i] = -(1 / (2 * dx * dx) *
                  ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
                   (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
                   (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
