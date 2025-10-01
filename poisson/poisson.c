@@ -31,14 +31,13 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
     F[i] = (1 / (2 * dx * dx) *
                  ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
                   (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
-                  (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
+                  (permittivity[i] + permittivity[i + 1]) * V[i + 1]) +
              q * (Nd[i] - Na[i] - n[i] + p[i]));
   for(int i=0;i<N;i++)F[i]=-F[i];
   for (i = 0; i < N; i++)
     Fnorm = fmax(Fnorm, fabs(F[i]));
   do {
     // Setting boundary conditions
-    plotxy(sim.x,V,N);
     V[0] = Vbound1;
     V[N - 1] = Vbound2;
     J[0 * 3 + 1] = 1;
@@ -67,7 +66,7 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
       F[i] = (1 / (2 * dx * dx) *
                    ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
                     (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
-                    (permittivity[i] + permittivity[i + 1]) * V[i + 1]) -
+                    (permittivity[i] + permittivity[i + 1]) * V[i + 1]) +
                q * (Nd[i] - Na[i] - n[i] + p[i]));
     }
     for(int i=0;i<N;i++) F[i]=-F[i];
