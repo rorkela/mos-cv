@@ -12,7 +12,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   double *Vprevnorm = malloc(N*sizeof(double));
   for(int i=0;i<N;i++) Vnorm[i]=V[i]/(kB*mos.T/q);
   for(int i=0;i<N;i++) Vprevnorm[i]=Vprev[i]/(kB*mos.T/q);
-  int maxiter=100;
+  int maxiter=10;
   int iter=0;
   do{
     computeJacobi_n(jac,mos.mu_n,Vnorm,p,N);
@@ -20,6 +20,9 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) n[i]+=update[i];
+  }while (iter++<maxiter);
+  iter=0;
+  do{
     computeJacobi_p(jac,mos.mu_p,Vnorm,n,N);
     residual_p(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_p, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
@@ -52,9 +55,9 @@ void compute_Jp(double *J, double *V, double *p, double u, int N) {
     if(IN_OX(i)) //Inside Oxide Current is zero
       J[i]=0;
     else //In bulk of semiconductor, this the equation
-      J[i] = (kB * mos.T *u / mos.dx)* (p[i+1]*B(-(V[i+1]-V[i]))-p[i]*B(V[i+1]-V[i]));
+      J[i] = -(kB * mos.T *u / mos.dx)* (p[i+1]*B(-(V[i+1]-V[i]))-p[i]*B(V[i+1]-V[i]));
   }
-  J[N-1]= (kB * mos.T *u/mos.dx)*((p_teq)-p[N-1]); //Ohmic Boundary at endpoint
+  J[N-1]= -(kB * mos.T *u/mos.dx)*((p_teq)-p[N-1]); //Ohmic Boundary at endpoint
   //In mine its not negated. in namans code it is negated.
   return;
 }
@@ -139,11 +142,11 @@ void computeJacobi_p(double *Jac,double u,double *V,double *n, int N){
       Jac[3*i+2]=0;
     }
     else{ //In bulk
-      Jac[3*i]=C*B(-V[i-1]+V[i]);
+      Jac[3*i]=-C*B(-V[i-1]+V[i]);
       // DRi/Dni
-      Jac[3*i+1]=mos.C_Rr*n[i]/2 - C*B(V[i-1]-V[i]) - C*B(-V[i]+V[i+1])+1/dt;
+      Jac[3*i+1]=mos.C_Rr*n[i]/2 + C*B(V[i-1]-V[i]) + C*B(-V[i]+V[i+1])+1/dt;
       // DRi/Dni+1
-      Jac[3*i+2]=C*B(V[i]-V[i+1]) ;
+      Jac[3*i+2]=-C*B(V[i]-V[i+1]) ;
     }
 
   }
