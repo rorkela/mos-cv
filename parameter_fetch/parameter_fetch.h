@@ -3,8 +3,8 @@
 #define kB 1.380649e-23 // J/K
 #define q 1.602176634e-19
 #define IN_OX(i) ((i) * mos.dx <= mos.t_oxide)
-#define n_teq mos.Nd
-#define p_teq mos.ni*mos.ni/mos.Nd
+#define n_teq mos.ni*mos.ni/mos.Na
+#define p_teq mos.Na
 // To store the input parameters for voltage.
 // V=V.bias+V.sin*sin(2*M_PI*f*T);
 struct signal {

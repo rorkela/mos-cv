@@ -8,8 +8,8 @@ void init_default_parameters(void) {
   mos.nz = 10000;
   mos.eps_oxide = 3.9 * 8.854e-12;
   mos.eps_si = 11.68 * 8.854e-12;
-  mos.Na = 0;
-  mos.Nd = 1e20;
+  mos.Na = 1e20;
+  mos.Nd = 0;
   mos.ni = 1e16;
   mos.mu_n = 0.135;
   mos.mu_p = 0.045;

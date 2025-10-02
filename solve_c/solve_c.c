@@ -2,7 +2,7 @@
 #define MAX_ITER 40
 double solve_c(struct signal Vin) {
   int N = mos.nz;
-  double drichlet_factor = kB * mos.T * log(mos.Nc / mos.Nd); // WARNING: Hardcoded for n doped
+  double drichlet_factor = kB * mos.T * log(mos.Nc / mos.Na); // WARNING: Hardcoded for n doped
   double delta = 0;
   int iter = 0;
   // Defining variables for charge density for C calculations
@@ -11,7 +11,7 @@ double solve_c(struct signal Vin) {
   double Qprev; // Temporary variable
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = 10;
+  int tstepmax = 1000;
   sim.dt = 1e-10;
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
@@ -40,7 +40,7 @@ double solve_c(struct signal Vin) {
     V[i] = Vin.bias * (1 - (double)i / (N - 1)) + drichlet_factor;
   }
   Qdc = solve_charge_density(V);
-     plotstate(sim.x,V,n,p);
+    //  plotstate(sim.x,V,n,p);
   while (tstep++ <= tstepmax) {
     iter=0;
     copy_arr(n, n_prev_t, N);
@@ -48,7 +48,7 @@ double solve_c(struct signal Vin) {
     copy_arr(V, V_prev_t, N);
     do {
 
-    printf("t=%d,iter=%d\n",tstep,iter);
+    // printf("t=%d,iter=%d\n",tstep,iter);
       copy_arr(n, n_prev, N);
       copy_arr(p, p_prev, N);
       copy_arr(V, V_prev, N);
@@ -73,14 +73,14 @@ double solve_c(struct signal Vin) {
     //if (delta <= 5e-3)
     //  break; // Tolerance is 0.5% change
   }
-  plotxy(sim.x,V,N/20);
-  plotxy(sim.x,n,N/20);
-  plotxy(sim.x,p,N/20);
-  plotstate(sim.x,V,n,p);
+  // plotxy(sim.x,V,N/20);
+  // plotxy(sim.x,n,N/20);
+  // plotxy(sim.x,p,N/20);
+  // plotstate(sim.x,V,n,p);
   // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
-  tstep=0;
+  /*tstep=0;
   tstepmax=10;
   Qac=Qdc;
   while (tstep++ <= tstepmax) {
@@ -113,7 +113,7 @@ double solve_c(struct signal Vin) {
     printf("%lf %d\n",Qac,tstep);
   }
   double c=(Qac-Qdc)/(Vin.bias*0.1);
-  printf("Solved\n");
+  printf("Solved\n");*/
   //fclose(chargedc);
   //fclose(chargeac);
   free(n);
@@ -125,7 +125,7 @@ double solve_c(struct signal Vin) {
   free(n_prev_t);
   free(p_prev_t);
   free(V_prev_t);
-  return c;
+  return fabs(Qdc);
 }
 
 double solve_charge_density(double *V) // To solve for charge density
