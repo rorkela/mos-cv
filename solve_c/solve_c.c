@@ -69,14 +69,14 @@ double solve_c(struct signal Vin) {
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
     //fprintf(chargedc,"%e\n",Qdc);
-    printf("%e\n",Qdc);
-    //if (delta <= 5e-3)
-    //  break; // Tolerance is 0.5% change
+    printf("t=%d,Qdc=%e,delta=%e\n",tstep,Qdc,delta);
+    if (delta <= 5e-3)
+      break; // Tolerance is 0.5% change
   }
-  // plotxy(sim.x,V,N/20);
-  // plotxy(sim.x,n,N/20);
-  // plotxy(sim.x,p,N/20);
-  // plotstate(sim.x,V,n,p);
+  plotxy(sim.x,V,N/20);
+  plotxy(sim.x,n,N/20);
+  plotxy(sim.x,p,N/20);
+  plotstate(sim.x,V,n,p);
   // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
@@ -125,7 +125,7 @@ double solve_c(struct signal Vin) {
   free(n_prev_t);
   free(p_prev_t);
   free(V_prev_t);
-  return fabs(Qdc);
+  return (Qdc);
 }
 
 double solve_charge_density(double *V) // To solve for charge density

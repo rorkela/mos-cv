@@ -20,7 +20,7 @@ void init_default_parameters(void) {
   mos.Vfb = -0.2;
   mos.Vth = 0.7;
   mos.T = 300.0;
-  mos.Gr = 0;
+  mos.Gr = 1.1e25;
   mos.C_Rr = 1.1e-8;
 }
 
