@@ -3,9 +3,9 @@ struct parameter mos;
 struct sim_arrays sim;
 void init_default_parameters(void) {
   mos.t_oxide = 5e-6;
-  mos.area = 1e-4;
+  mos.area = 100e-6;
   mos.t_semi = 10e-4;
-  mos.nz = 10000;
+  mos.nz = 1000;
   mos.eps_oxide = 3.9 * 8.854e-12;
   mos.eps_si = 11.68 * 8.854e-12;
   mos.Na = 1e20;
@@ -20,7 +20,7 @@ void init_default_parameters(void) {
   mos.Vfb = -0.2;
   mos.Vth = 0.7;
   mos.T = 300.0;
-  mos.Gr = 1.1e25;
+  mos.Gr = 1.1e30;
   mos.C_Rr = 1.1e-8;
 }
 

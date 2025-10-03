@@ -73,10 +73,10 @@ double solve_c(struct signal Vin) {
     if (delta <= 5e-3)
       break; // Tolerance is 0.5% change
   }
-  plotxy(sim.x,V,N/20);
-  plotxy(sim.x,n,N/20);
-  plotxy(sim.x,p,N/20);
-  plotstate(sim.x,V,n,p);
+  //plotxy(sim.x,V,N/20);
+  //plotxy(sim.x,n,N/20);
+  //plotxy(sim.x,p,N/20);
+  //plotstate(sim.x,V,n,p);
   // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
