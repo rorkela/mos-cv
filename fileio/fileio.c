@@ -26,7 +26,7 @@ void printarr(double *x, int N) {
 
 void plotstate(double *x, double *V, double *n, double *p)
 {
-    int N = mos.nz/2;
+    int N = mos.nz;
     FILE *gp = popen("gnuplot -persistent", "w");
     if (!gp) {
         perror("gnuplot");

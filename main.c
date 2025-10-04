@@ -7,9 +7,9 @@ int main() {
   // Defining
   struct signal Vin;
   int i;
-  int dcdiv=10;
-  double Vstart=1.5;
-  double Vend=-0.630;
+  int dcdiv=31;
+  double Vstart=2.5;
+  double Vend=-1;
   Vin.f=10;
   Vin.sin=0.01;
   double *C = malloc(dcdiv*sizeof(double));
