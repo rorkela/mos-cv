@@ -1,5 +1,5 @@
 #include "../main.h"
-#define MAX_ITER 20
+#define MAX_ITER 10
 /* This one will use newton rhapson to solve.
  * Takes input as
  * V - Voltage array and with initial guess supplied.
@@ -71,9 +71,9 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
     }
     for(int i=0;i<N;i++) F[i]=-F[i];
     // Computing norm for stopping in convergence
-    Fnorm = 0;
-    for (i = 0; i < N; i++)
-      Fnorm = fmax(Fnorm, fabs(F[i]));
+    //Fnorm = 0;
+    //for (i = 0; i < N; i++)
+    //  Fnorm = fmax(Fnorm, fabs(F[i]));
     /*if (Fnorm / Fnorm_prev < 1e-6)
     {
       printf("poisson.c: took %d iterations\n",iter);
@@ -84,7 +84,12 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
   free(X);
   free(F);
 }
+void poisson_residual(){
 
+}
+void poisson_jacobian(){
+
+}
 void thomas(double *A, double *B, int N, double *x) {
   // here assumed the A matrix passed to this is already compacted tridiagonal Nx3
   // B matrix should be Nx1

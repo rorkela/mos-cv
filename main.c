@@ -7,15 +7,16 @@ int main() {
   // Defining
   struct signal Vin;
   int i;
-  int dcdiv=100;
-  double Vstart=-1.9;
-  double Vend=2;
+  int dcdiv=10;
+  double Vstart=1.5;
+  double Vend=-0.630;
   Vin.f=10;
   Vin.sin=0.01;
   double *C = malloc(dcdiv*sizeof(double));
   double *bias =malloc(dcdiv*sizeof(double));
   FILE *out=fopen("charge.csv","w");
   for (i=0;i<dcdiv;i++) {
+    printf("------%d/%d-------\n",i,dcdiv);
     Vin.bias=i*Vend/dcdiv+(dcdiv-i)*Vstart/dcdiv;
     bias[i]=Vin.bias;
     C[i] = solve_c(Vin);

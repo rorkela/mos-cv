@@ -491,7 +491,7 @@ mos_cv: /lib64/ld-linux-x86-64.so.2 \
   /usr/lib/gcc/x86_64-redhat-linux/15/libgcc.a \
   /usr/lib/gcc/x86_64-redhat-linux/15/libgcc_s.so \
   /usr/lib64/libc_nonshared.a \
-  CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o \
+  CMakeFiles/mos_cv.dir/carrier_continuity/carriermogged.c.o \
   CMakeFiles/mos_cv.dir/fileio/fileio.c.o \
   CMakeFiles/mos_cv.dir/main.c.o \
   CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o \
@@ -499,7 +499,7 @@ mos_cv: /lib64/ld-linux-x86-64.so.2 \
   CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o
 
 
-CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o:
+CMakeFiles/mos_cv.dir/carrier_continuity/carriermogged.c.o:
 
 /usr/lib/gcc/x86_64-redhat-linux/15/libgcc_s.so:
 

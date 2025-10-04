@@ -12,14 +12,14 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   double *Vprevnorm = malloc(N*sizeof(double));
   for(int i=0;i<N;i++) Vnorm[i]=V[i]/(kB*mos.T/q);
   for(int i=0;i<N;i++) Vprevnorm[i]=Vprev[i]/(kB*mos.T/q);
-  int maxiter=10;
+  int maxiter=20;
   int iter=0;
   do{
     computeJacobi_n(jac,mos.mu_n,Vnorm,p,N);
     residual_n(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_n, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
-    for(int i=0;i<N;i++) n[i]+=update[i];
+    for(int i=0;i<N;i++) n[i]+=0.5*update[i];
   }while (iter++<maxiter);
   iter=0;
   do{
@@ -27,7 +27,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     residual_p(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_p, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
-    for(int i=0;i<N;i++) p[i]+=update[i];
+    for(int i=0;i<N;i++) p[i]+=0.5*update[i];
   }while(iter++<maxiter);
   free(jac);
   free(res);

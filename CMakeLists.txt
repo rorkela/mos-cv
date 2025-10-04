@@ -9,7 +9,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2")
 set(SRC_FILES
     main.c
     parameter_fetch/parameter_fetch.c
-    carrier_continuity/carrier.c
+    carrier_continuity/carriermogged.c
     poisson/poisson.c
     solve_c/solve_c.c
     fileio/fileio.c

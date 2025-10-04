@@ -1,8 +1,9 @@
 #include "../main.h"
-#define MAX_ITER 40
+#define MAX_ITER 20
+#define MIN_TSTEP 50
 double solve_c(struct signal Vin) {
   int N = mos.nz;
-  double drichlet_factor = kB * mos.T * log(mos.Nc / mos.Na); // WARNING: Hardcoded for n doped
+  double drichlet_factor = kB * mos.T /q* log(mos.Nc / n_teq); // WARNING: Hardcoded for n doped
   double delta = 0;
   int iter = 0;
   // Defining variables for charge density for C calculations
@@ -11,8 +12,8 @@ double solve_c(struct signal Vin) {
   double Qprev; // Temporary variable
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = 1000;
-  sim.dt = 1e-10;
+  int tstepmax = 100000;
+  sim.dt = 1e-12;
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
   double *p = malloc(N * sizeof(double));        // p for present computations
@@ -28,6 +29,7 @@ double solve_c(struct signal Vin) {
   //FILE *chargedc=fopen("charge_trans_dc.txt","w");
   //FILE *chargeac=fopen("charge_trans_ac.txt","w");
   // Starting from thermal equilibrium conditions at t=0;
+  Vin.bias=Vin.bias+drichlet_factor;
   for (int i = 0; i < N; i++) {
     if (IN_OX(i)) {
       n[i] = 0;
@@ -37,10 +39,9 @@ double solve_c(struct signal Vin) {
       n[i] = n_teq;
       p[i] = p_teq;
     }
-    V[i] = Vin.bias * (1 - (double)i / (N - 1)) + drichlet_factor;
+    V[i] = Vin.bias - (double)i/(N-1)*(Vin.bias-drichlet_factor);
   }
   Qdc = solve_charge_density(V);
-    //  plotstate(sim.x,V,n,p);
   while (tstep++ <= tstepmax) {
     iter=0;
     copy_arr(n, n_prev_t, N);
@@ -49,18 +50,18 @@ double solve_c(struct signal Vin) {
     do {
 
     // printf("t=%d,iter=%d\n",tstep,iter);
-      copy_arr(n, n_prev, N);
-      copy_arr(p, p_prev, N);
-      copy_arr(V, V_prev, N);
+      //copy_arr(n, n_prev, N);
+      //copy_arr(p, p_prev, N);
+      //copy_arr(V, V_prev, N);
       poisson(V, n, p, V[0], V[N - 1]);
       carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
       // Logic for computing delta
-      delta = 0;
-      for (int i = 0; i < N; i++) {
-        compute_delta(&delta, V[i], V_prev[i]);
-        compute_delta(&delta, n[i], n_prev[i]);
-        compute_delta(&delta, p[i], p_prev[i]);
-      }
+      //delta = 0;
+      //for (int i = 0; i < N; i++) {
+      //  compute_delta(&delta, V[i], V_prev[i]);
+      //  compute_delta(&delta, n[i], n_prev[i]);
+      //  compute_delta(&delta, p[i], p_prev[i]);
+      //}
       // if (delta <= 1e-25)
       //   break;
       
@@ -69,10 +70,11 @@ double solve_c(struct signal Vin) {
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
     //fprintf(chargedc,"%e\n",Qdc);
-    printf("t=%d,Qdc=%e,delta=%e\n",tstep,Qdc,delta);
-    if (delta <= 5e-3)
-      break; // Tolerance is 0.5% change
+    printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
+    if (delta <= 2e-7 && tstep>MIN_TSTEP)
+      break;
   }
+  plotstate(sim.x,V,n,p);
   //plotxy(sim.x,V,N/20);
   //plotxy(sim.x,n,N/20);
   //plotxy(sim.x,p,N/20);
