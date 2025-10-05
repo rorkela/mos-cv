@@ -22,11 +22,8 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
   double *J = calloc(N * 3, sizeof(double));
   double *X = malloc(N * sizeof(double));
   double *F = malloc(N * sizeof(double));
-  do {
-    // Setting boundary conditions
-    V[0] = Vbound1;
-    V[N - 1] = Vbound2;
     //Jacobian
+  // NOTE: Needs to be built once. For one run, the Jacobian is constant. 
     J[0 * 3 + 1] = 1;
     J[(N - 1) * 3 + 1] = 1;
     J[0 * 3 + 0] = J[0 * 3 + 2] = 0;
@@ -37,6 +34,10 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
                      q * q * (p[i] + n[i]) / (kB * mos.T);
       J[i * 3 + 2] = (permittivity[i] + permittivity[i + 1]) / (2 * dx * dx);
     }
+  do {
+    // Setting boundary conditions
+    V[0] = Vbound1;
+    V[N - 1] = Vbound2;
     //Residual
     F[0] = 0;
     F[N - 1] = 0;

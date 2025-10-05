@@ -14,16 +14,16 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   for(int i=0;i<N;i++) Vprevnorm[i]=Vprev[i]/(kB*mos.T/q);
   int maxiter=20;
   int iter=0;
+  computeJacobi_n(jac,mos.mu_n,Vnorm,p,N);
   do{
-    computeJacobi_n(jac,mos.mu_n,Vnorm,p,N);
     residual_n(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_n, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) n[i]+=0.5*update[i];
   }while (iter++<maxiter);
   iter=0;
+  computeJacobi_p(jac,mos.mu_p,Vnorm,n,N);
   do{
-    computeJacobi_p(jac,mos.mu_p,Vnorm,n,N);
     residual_p(res, n, p, nprev, pprev, Vnorm, Vprevnorm, mos.mu_p, N);
     for(int i=0;i<N;i++) res[i]=-res[i];
     thomas(jac,res,N,update);
