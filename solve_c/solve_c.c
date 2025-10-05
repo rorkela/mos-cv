@@ -71,10 +71,10 @@ double solve_c(struct signal Vin) {
     delta = fabs(1 - Qdc / Qprev);
     //fprintf(chargedc,"%e\n",Qdc);
     printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
-    if (delta <= 2e-7 && tstep>MIN_TSTEP)
+    if (delta <= 2e-6 && tstep>MIN_TSTEP)
       break;
   }
-  plotstate(sim.x,V,n,p);
+  // plotstate(sim.x,V,n,p);
   //plotxy(sim.x,V,N/20);
   //plotxy(sim.x,n,N/20);
   //plotxy(sim.x,p,N/20);

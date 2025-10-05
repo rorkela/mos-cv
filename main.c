@@ -8,7 +8,7 @@ int main() {
   struct signal Vin;
   int i;
   int dcdiv=31;
-  double Vstart=2.5;
+  double Vstart=2;
   double Vend=-1;
   Vin.f=10;
   Vin.sin=0.01;

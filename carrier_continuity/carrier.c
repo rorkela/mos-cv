@@ -65,13 +65,10 @@ void compute_Jp(double *J, double *V, double *p, double u, int N) {
 
 // function that takes the matrices needed and throws back the jacobi of it
 // rn this one is only for N but can be simply copied for P 
-// INCOMPLETE and dont run
 // u is the mobility
 void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
   // so fill the jacobi with the required derivatives
   // jacobi is Nx3 as tridiagonal and the terms will come using the other matrices
-
-  // WARNING: the term del Ri/del ni doesnt have the derivative of the generation and recombination rate wrt Ni
 
   double c=(kB*mos.T/(2*mos.dx*mos.dx));
   // just put cu/q as mogger_constant
@@ -91,7 +88,6 @@ void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
     else if(IN_OX(i-1)){
     Jac[3*i]=0;
     // DRi/Dni
-    // WARNING: recombination derivative term left
     Jac[3*i+1]= (1/delta_T) -(mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + 0*B(V[i]-V[i-1]) )) + mos.C_Rr*p[i]/2 ;
     // DRi/Dni+1
     Jac[3*i+2]= -(mogger_constant*(B(V[i+1]-V[i])));
@@ -99,7 +95,6 @@ void computeJacobi_n(double *Jac,double u,double *V,double *p, int N){
     else{
     Jac[3*i]= (mogger_constant*(B(V[i]-V[i-1]) * exp(V[i]-V[i-1])));
     // DRi/Dni
-    // WARNING: recombination derivative term left
     Jac[3*i+1]= (1/delta_T) -(mogger_constant*( (B(V[i+1]-V[i])*exp(V[i+1]-V[i]) ) + B(V[i]-V[i-1]) )) + mos.C_Rr*p[i]/2 ;
     // DRi/Dni+1
     Jac[3*i+2]= -(mogger_constant*(B(V[i+1]-V[i])));
