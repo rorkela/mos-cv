@@ -1,8 +1,9 @@
 #include "main.h"
-
+struct array_memory mem;
 int main() {
   init_default_parameters();
   init_params();
+  init_memory();
 
   // Defining
   struct signal Vin;
@@ -26,4 +27,22 @@ int main() {
   fclose(out);
   free(C);
   free(bias);
+  free_memory();
+}
+
+
+
+void init_memory(){
+  for(int i=0;i<10;i++)
+  {
+    mem.arrayn[i]=malloc(mos.nz*sizeof(double));
+  }
+  mem.array3n=malloc(3*mos.nz*sizeof(double));
+}
+void free_memory(){
+  for(int i=0;i<10;i++)
+  {
+    free(mem.arrayn[i]);
+  }
+  free(mem.array3n);
 }
