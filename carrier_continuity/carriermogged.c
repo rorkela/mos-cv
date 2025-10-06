@@ -5,11 +5,11 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   // Newton Rhapson used
   // Jac is Jacobian
   // Res  is the value of function from initial guess
-  double *jac = mem.array3n;
-  double *res = mem.arrayn[0];
-  double *update = mem.arrayn[1];
-  double *Vnorm =  mem.arrayn[2];
-  double *Vprevnorm = mem.arrayn[3];
+  double *jac = malloc(3*N*sizeof(double));
+  double *res = malloc(N*sizeof(double));
+  double *update = malloc(N*sizeof(double));
+  double *Vnorm =  malloc(N*sizeof(double));
+  double *Vprevnorm = malloc(N*sizeof(double));
   for(int i=0;i<N;i++) Vnorm[i]=V[i]/(kB*mos.T/q);
   for(int i=0;i<N;i++) Vprevnorm[i]=Vprev[i]/(kB*mos.T/q);
   int maxiter=20;
@@ -29,6 +29,11 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
     thomas(jac,res,N,update);
     for(int i=0;i<N;i++) p[i]+=0.5*update[i];
   }while(iter++<maxiter);
+  free(jac);
+  free(res);
+  free(update);
+  free(Vnorm);
+  free(Vprevnorm);
 }
 // J[i] is current density at i+0.5.
 // Normalized V is passed. 
@@ -151,9 +156,9 @@ void residual_n(double* res,double* n,double* p,double* nprev,double* pprev,doub
   // function to return the values of residual
   // used crank nicolson scheme for this (can be changed if not working)
   // we need current density for this
-  double *J = mem.arrayn[4];
+  double *J = malloc(N*sizeof(double));
   compute_J(J,V,n,u,N);
-  double *Jprev = mem.arrayn[5];
+  double *Jprev = malloc(N*sizeof(double));
   compute_J(Jprev,Vprev,nprev,u,N);
 
   for(int i=0;i<N;i++){
@@ -170,15 +175,17 @@ void residual_n(double* res,double* n,double* p,double* nprev,double* pprev,doub
       res[i]=(n[i]-nprev[i])/(sim.dt) - ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr*(n[i]*p[i]/2+nprev[i]*pprev[i]/2-mos.ni*mos.ni));
     }
   }
+  free(J);
+  free(Jprev);
 }
 
 void residual_p(double* res,double* n,double* p,double* nprev,double* pprev,double* V,double* Vprev,double u,int N){
   // function to return the values of residual
   // used crank nicolson scheme for this (can be changed if not working)
   // we need current density for this
-  double *J = mem.arrayn[4];
+  double *J = malloc(N*sizeof(double));
   compute_Jp(J,V,p,u,N);
-  double *Jprev = mem.arrayn[5];
+  double *Jprev = malloc(N*sizeof(double));
   compute_Jp(Jprev,Vprev,pprev,u,N);
 
   for(int i=0;i<N;i++){
@@ -195,6 +202,8 @@ void residual_p(double* res,double* n,double* p,double* nprev,double* pprev,doub
       res[i]=(p[i]-pprev[i])/(sim.dt) + ((J[i]-J[i-1]+Jprev[i]-Jprev[i-1])/(2*q*mos.dx)) -(mos.Gr - mos.C_Rr*(n[i]*p[i]/2+nprev[i]*pprev[i]/2-mos.ni*mos.ni));
     }
   }
+  free(J);
+  free(Jprev);
 }
 
 

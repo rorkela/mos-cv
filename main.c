@@ -13,16 +13,21 @@ int main() {
   double Vend=-1;
   Vin.f=10;
   Vin.sin=0.01;
+  scanf("%lf",&mos.Gr);
   double *C = malloc(dcdiv*sizeof(double));
   double *bias =malloc(dcdiv*sizeof(double));
-  FILE *out=fopen("charge.csv","w");
+  char filename[50];
+  sprintf(filename,"%.0e.csv",mos.Gr);
+  FILE *out=fopen(filename,"w");
+  #pragma omp parallel for
   for (i=0;i<dcdiv;i++) {
     printf("------%d/%d-------\n",i,dcdiv);
     Vin.bias=i*Vend/dcdiv+(dcdiv-i)*Vstart/dcdiv;
     bias[i]=Vin.bias;
     C[i] = solve_c(Vin);
-    fprintf(out,"%e\t%e\n", bias[i],C[i]);
   }
+  for(int i=0;i<dcdiv;i++)
+    fprintf(out,"%e\t%e\n", bias[i],C[i]);
   plotxy(bias,C,dcdiv);
   fclose(out);
   free(C);

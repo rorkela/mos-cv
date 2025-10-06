@@ -23,7 +23,7 @@ for filename in os.listdir(directory):
         dydx = np.gradient(y, x)
 
         # Plot derivative
-        plt.plot(x, dydx, label=filename)
+        plt.plot(x, dydx, label=filename,marker='.')
 
 plt.xlabel("x")
 plt.ylabel("dy/dx")

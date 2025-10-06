@@ -5,6 +5,7 @@
 #include "parameter_fetch/parameter_fetch.h"
 #include "poisson/poisson.h"
 #include "solve_c/solve_c.h"
+#include <omp.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -12,7 +12,7 @@ double solve_c(struct signal Vin) {
   double Qprev; // Temporary variable
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = 100000;
+  int tstepmax = 1000000;
   sim.dt = 1e-12;
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
@@ -69,8 +69,7 @@ double solve_c(struct signal Vin) {
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
-    //fprintf(chargedc,"%e\n",Qdc);
-    printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
+    if(tstep%1000==0)printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
     if (delta <= 2e-6 && tstep>MIN_TSTEP)
       break;
   }
