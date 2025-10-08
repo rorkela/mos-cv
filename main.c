@@ -1,9 +1,17 @@
 #include "main.h"
+#include "parameter_fetch/parameter_fetch.h"
 struct array_memory mem;
-int main() {
+int main(int argc, char *argv[]) {
+  //initialization
   init_default_parameters();
   init_params();
-  init_memory();
+  if(argc<3)
+  {
+    printf("Syntax: %s <parameter input file(if not found,it will be generated)> <output file>", argv[0]);
+    return 0;
+  }
+  load_or_create_parameters(argv[1]);
+
 
   // Defining
   struct signal Vin;
@@ -13,26 +21,19 @@ int main() {
   double Vend=-1;
   Vin.f=10;
   Vin.sin=0.01;
-  scanf("%lf",&mos.Gr);
-  double *C = malloc(dcdiv*sizeof(double));
-  double *bias =malloc(dcdiv*sizeof(double));
-  char filename[50];
-  sprintf(filename,"%.0e.csv",mos.Gr);
-  FILE *out=fopen(filename,"w");
+  //scanf("%lf",&mos.Gr);
+  FILE *out=fopen(argv[2],"w");
+  shit *output=malloc(dcdiv*sizeof(shit));
   #pragma omp parallel for
   for (i=0;i<dcdiv;i++) {
     printf("------%d/%d-------\n",i,dcdiv);
     Vin.bias=i*Vend/dcdiv+(dcdiv-i)*Vstart/dcdiv;
-    bias[i]=Vin.bias;
-    C[i] = solve_c(Vin);
+    output[i] = solve_c(Vin);
   }
   for(int i=0;i<dcdiv;i++)
-    fprintf(out,"%e\t%e\n", bias[i],C[i]);
-  plotxy(bias,C,dcdiv);
+    fprintf(out,"%e\t%e\t%e\t%e\n", output[i].Vbias,output[i].Qdc,output[i].dVac,output[i].dQac);
   fclose(out);
-  free(C);
-  free(bias);
-  free_memory();
+  free(output);
 }
 
 

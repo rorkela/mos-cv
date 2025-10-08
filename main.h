@@ -5,6 +5,7 @@
 #include "parameter_fetch/parameter_fetch.h"
 #include "poisson/poisson.h"
 #include "solve_c/solve_c.h"
+#include "carrier_steady_state/carrier_ss.h"
 #include <omp.h>
 #include <math.h>
 #include <stdio.h>

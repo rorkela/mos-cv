@@ -12,44 +12,43 @@ struct signal {
   double sin;  // Amplitude of sine
   double f;    // Frequency of sine
 };
-struct parameter {
+struct mos_param {
   double t_oxide; // Thickness of oxide. Again not needed ig
   double area;    // Area of mos(not needed ig. professor said unit area)
   double t_semi;  // Height of mesh
   int nz;         // Meshing points.
-  double dx;
+  double dx;      // Meshing distance. Computed. DONT SET.
 
-  double eps_oxide;
-  double eps_si;
-  double Na;   // Doping conc
-  double Nd;   // Doping conc
+  double eps_oxide; //Oxide permittivity
+  double eps_si;  //Semiconductor permittivity
+  double Na;   // Acceptor Doping conc
+  double Nd;   // Donor Doping conc
   double mu_n; // Mobility of n in silicon
   double mu_p; // Mobility of p in silicon
   double ni;   // Intrinsic Carrier Concentration
   double Nc;   // Effective DOS in CB
   double Nv;   // Effective DOS in VB
 
-  double Vg;
-  double Vfb;
-  double Vth;
   double T;    // Temperature
   double Gr;   // Generation rate uniformly assumed
   double C_Rr; // Radiative Recombination formula
 
   // add more as needed...
 };
-struct sim_arrays {
-  double *Nd;   // donor doping
-  double *Na;   // acceptor doping
-  double *perm; // permittivity
-  double dt;
-  double *x;
-  int tdiv;
+struct sim_param {
+  double *Nd;   // donor doping. To be computed
+  double *Na;   // acceptor doping. To be computed
+  double *perm; // permittivity. To be computed
+  double dt; //Timestep.
+  double *x; //x axis position of each meshing point. To be computed
+  int tdiv; //Deprecated
 };
-extern struct sim_arrays sim;
-extern struct parameter mos;
+extern struct sim_param sim;
+extern struct mos_param mos;
 void init_default_parameters(void);
-int load_parameters_from_file(const char *fname); // Doesnt input everything yet. Use default parameters
+void load_parameters_from_file(const char *filename); // Doesnt input everything yet. Use default parameters
 void print_parameters(void);
 void init_params();
+void save_parameters_to_file(const char *filename);
+void load_or_create_parameters(const char *filename);
 #endif

@@ -1,7 +1,8 @@
 #include "../main.h"
 #define MAX_ITER 20
 #define MIN_TSTEP 50
-double solve_c(struct signal Vin) {
+shit solve_c(struct signal Vin) {
+  shit output;
   int N = mos.nz;
   double drichlet_factor = kB * mos.T /q* log(mos.Nc / n_teq); // WARNING: Hardcoded for n doped
   double delta = 0;
@@ -13,7 +14,7 @@ double solve_c(struct signal Vin) {
   // Defining parameters for time
   int tstep = 0;
   int tstepmax = 1000000;
-  sim.dt = 1e-12;
+  sim.dt = 2e-12;
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
   double *p = malloc(N * sizeof(double));        // p for present computations
@@ -69,7 +70,7 @@ double solve_c(struct signal Vin) {
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
-    if(tstep%1000==0)printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
+    if(tstep%500==0)printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
     if (delta <= 2e-6 && tstep>MIN_TSTEP)
       break;
   }
@@ -77,7 +78,6 @@ double solve_c(struct signal Vin) {
   //plotxy(sim.x,V,N/20);
   //plotxy(sim.x,n,N/20);
   //plotxy(sim.x,p,N/20);
-  //plotstate(sim.x,V,n,p);
   // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
   // AC Analysis
@@ -117,6 +117,13 @@ double solve_c(struct signal Vin) {
   printf("Solved\n");*/
   //fclose(chargedc);
   //fclose(chargeac);
+  
+
+  // Initializing Output
+  output.Vbias=Vin.bias;
+  output.dVac=Vin.sin;
+  output.Qdc=Qdc;
+  output.dQac=Qac;
   free(n);
   free(p);
   free(V);
@@ -126,7 +133,7 @@ double solve_c(struct signal Vin) {
   free(n_prev_t);
   free(p_prev_t);
   free(V_prev_t);
-  return (Qdc);
+  return (output);
 }
 
 double solve_charge_density(double *V) // To solve for charge density

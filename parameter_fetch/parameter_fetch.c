@@ -1,6 +1,6 @@
 #include "../main.h"
-struct parameter mos;
-struct sim_arrays sim;
+struct mos_param mos;
+struct sim_param sim;
 void init_default_parameters(void) {
   mos.t_oxide = 5e-7;
   mos.area = 10e-6;
@@ -16,59 +16,85 @@ void init_default_parameters(void) {
   mos.Nv = 1.8e25;
   mos.Nc = 3.2e25;
 
-  mos.Vg = 0.0;
-  mos.Vfb = -0.2;
-  mos.Vth = 0.7;
   mos.T = 300.0;
   mos.Gr = 1e28;
   mos.C_Rr = 1.1e-8;
 }
 
-int load_parameters_from_file(const char *fname) {
-  FILE *fp = fopen(fname, "r");
-  if (!fp) {
-    perror("Error opening parameter file");
-    return -1;
-  }
-
-  char name[64];
-  double value;
-
-  while (fscanf(fp, "%63s %lf", name, &value) == 2) {
-    if (strcmp(name, "t_oxide") == 0)
-      mos.t_oxide = value;
-    else if (strcmp(name, "area") == 0)
-      mos.area = value;
-    else if (strcmp(name, "height") == 0)
-      mos.t_semi = value;
-    else if (strcmp(name, "eps_oxide") == 0)
-      mos.eps_oxide = value;
-    else if (strcmp(name, "eps_si") == 0)
-      mos.eps_si = value;
-    else if (strcmp(name, "Na") == 0)
-      mos.Na = value;
-    else if (strcmp(name, "Nd") == 0)
-      mos.Nd = value;
-    else if (strcmp(name, "mu_n") == 0)
-      mos.mu_n = value;
-    else if (strcmp(name, "mu_p") == 0)
-      mos.mu_p = value;
-    else if (strcmp(name, "Vg") == 0)
-      mos.Vg = value;
-    else if (strcmp(name, "Vfb") == 0)
-      mos.Vfb = value;
-    else if (strcmp(name, "Vth") == 0)
-      mos.Vth = value;
-    else if (strcmp(name, "T") == 0)
-      mos.T = value;
-    else {
-      printf("Warning: Unknown parameter '%s' ignored.\n", name);
+void load_parameters_from_file(const char *filename) {
+    FILE *f = fopen(filename, "r");
+    if (!f) {
+        perror("Error opening parameter file");
+        exit(1);
     }
-  }
 
-  fclose(fp);
-  return 0;
+    char key[64];
+    double val;
+
+    while (fscanf(f, "%63s %lf", key, &val) == 2) {
+        if      (strcmp(key, "t_oxide") == 0) mos.t_oxide = val;
+        else if (strcmp(key, "area") == 0) mos.area = val;
+        else if (strcmp(key, "t_semi") == 0) mos.t_semi = val;
+        else if (strcmp(key, "nz") == 0) mos.nz = (int)val;
+        else if (strcmp(key, "eps_oxide") == 0) mos.eps_oxide = val;
+        else if (strcmp(key, "eps_si") == 0) mos.eps_si = val;
+        else if (strcmp(key, "Na") == 0) mos.Na = val;
+        else if (strcmp(key, "Nd") == 0) mos.Nd = val;
+        else if (strcmp(key, "mu_n") == 0) mos.mu_n = val;
+        else if (strcmp(key, "mu_p") == 0) mos.mu_p = val;
+        else if (strcmp(key, "ni") == 0) mos.ni = val;
+        else if (strcmp(key, "Nc") == 0) mos.Nc = val;
+        else if (strcmp(key, "Nv") == 0) mos.Nv = val;
+        else if (strcmp(key, "T") == 0) mos.T = val;
+        else if (strcmp(key, "Gr") == 0) mos.Gr = val;
+        else if (strcmp(key, "C_Rr") == 0) mos.C_Rr = val;
+        else
+            printf("Warning: Unknown parameter '%s' ignored\n", key);
+    }
+
+    fclose(f);
 }
+
+void save_parameters_to_file(const char *filename) {
+    FILE *f = fopen(filename, "w");
+    if (!f) {
+        perror("Error creating parameter file");
+        return;
+    }
+
+    fprintf(f, "t_oxide %e\n", mos.t_oxide);
+    fprintf(f, "area %e\n", mos.area);
+    fprintf(f, "t_semi %e\n", mos.t_semi);
+    fprintf(f, "nz %d\n", mos.nz);
+    fprintf(f, "eps_oxide %e\n", mos.eps_oxide);
+    fprintf(f, "eps_si %e\n", mos.eps_si);
+    fprintf(f, "Na %e\n", mos.Na);
+    fprintf(f, "Nd %e\n", mos.Nd);
+    fprintf(f, "mu_n %e\n", mos.mu_n);
+    fprintf(f, "mu_p %e\n", mos.mu_p);
+    fprintf(f, "ni %e\n", mos.ni);
+    fprintf(f, "Nc %e\n", mos.Nc);
+    fprintf(f, "Nv %e\n", mos.Nv);
+    fprintf(f, "T %e\n", mos.T);
+    fprintf(f, "Gr %e\n", mos.Gr);
+    fprintf(f, "C_Rr %e\n", mos.C_Rr);
+
+    fclose(f);
+    printf("Default parameters saved to '%s'\n", filename);
+}
+
+void load_or_create_parameters(const char *filename) {
+    FILE *f = fopen(filename, "r");
+    if (f) {
+        fclose(f);
+        load_parameters_from_file(filename);
+        printf("Loaded parameters from '%s'\n", filename);
+    } else {
+        printf("File '%s' not found. Writing default parameters...\n", filename);
+        save_parameters_to_file(filename);
+    }
+}
+
 void init_params() {
   sim.perm = malloc(mos.nz * sizeof(double));
   sim.Na = malloc(mos.nz * sizeof(double));
@@ -91,18 +117,4 @@ void init_params() {
   }
 }
 void print_parameters(void) {
-  printf("MOSCAP parameters:\n");
-  printf("  t_oxide   = %g m\n", mos.t_oxide);
-  printf("  area      = %g m^2\n", mos.area);
-  printf("  height    = %g m\n", mos.t_semi);
-  printf("  eps_oxide = %g F/m\n", mos.eps_oxide);
-  printf("  eps_si    = %g F/m\n", mos.eps_si);
-  printf("  Na        = %g m^-3\n", mos.Na);
-  printf("  Nd        = %g m^-3\n", mos.Nd);
-  printf("  mu_n      = %g m^2/Vs\n", mos.mu_n);
-  printf("  mu_p      = %g m^2/Vs\n", mos.mu_p);
-  printf("  Vg        = %g V\n", mos.Vg);
-  printf("  Vfb       = %g V\n", mos.Vfb);
-  printf("  Vth       = %g V\n", mos.Vth);
-  printf("  T         = %g K\n", mos.T);
 }
