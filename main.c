@@ -19,8 +19,7 @@ int main(int argc, char *argv[]) {
   int dcdiv=31;
   double Vstart=2;
   double Vend=-1;
-  Vin.f=10;
-  Vin.sin=0.01;
+  Vin.f=1E8;
   //scanf("%lf",&mos.Gr);
   FILE *out=fopen(argv[2],"w");
   shit *output=malloc(dcdiv*sizeof(shit));
@@ -28,6 +27,7 @@ int main(int argc, char *argv[]) {
   for (i=0;i<dcdiv;i++) {
     printf("------%d/%d-------\n",i,dcdiv);
     Vin.bias=i*Vend/dcdiv+(dcdiv-i)*Vstart/dcdiv;
+    Vin.sin=(Vin.bias)/10;
     output[i] = solve_c(Vin);
   }
   for(int i=0;i<dcdiv;i++)

@@ -9,8 +9,7 @@ shit solve_c(struct signal Vin) {
   int iter = 0;
   // Defining variables for charge density for C calculations
   double Qdc;   // For Q in DC steady state
-  double Qac;   // For Maximum Q in AC
-  double Qprev; // Temporary variable
+  double Qprev = 0; // Temporary variable
   // Defining parameters for time
   int tstep = 0;
   int tstepmax = 1000000;
@@ -19,9 +18,9 @@ shit solve_c(struct signal Vin) {
   double *n = malloc(N * sizeof(double));        // n for present computations
   double *p = malloc(N * sizeof(double));        // p for present computations
   double *V = malloc(N * sizeof(double));        // V for present computations
-  double *n_prev = malloc(N * sizeof(double));   // n in previous computation for same t
-  double *p_prev = malloc(N * sizeof(double));   // p in previous computation for same t
-  double *V_prev = malloc(N * sizeof(double));   // V in previous computation for same t
+  // double *n_prev = malloc(N * sizeof(double));   // n in previous computation for same t
+  // double *p_prev = malloc(N * sizeof(double));   // p in previous computation for same t
+  // double *V_prev = malloc(N * sizeof(double));   // V in previous computation for same t
   double *n_prev_t = malloc(N * sizeof(double)); // n in previous time instant.
   double *p_prev_t = malloc(N * sizeof(double)); // p in previous time instant.
   double *V_prev_t = malloc(N * sizeof(double)); // V in previous time instant.
@@ -42,6 +41,8 @@ shit solve_c(struct signal Vin) {
     }
     V[i] = Vin.bias - (double)i/(N-1)*(Vin.bias-drichlet_factor);
   }
+
+  // **** DC ANALYSIS STARTS HERE ****
   Qdc = solve_charge_density(V);
   while (tstep++ <= tstepmax) {
     iter=0;
@@ -80,59 +81,100 @@ shit solve_c(struct signal Vin) {
   //plotxy(sim.x,p,N/20);
   // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
-  // AC Analysis
-  /*tstep=0;
-  tstepmax=10;
-  Qac=Qdc;
+
+    // Initializing arrays for n p V and for previous time instant for AC STUFF
+  double *nAC = malloc(N * sizeof(double));        // n for present computations
+  double *pAC = malloc(N * sizeof(double));        // p for present computations
+  double *VAC = malloc(N * sizeof(double));        // V for present computations
+  // double *n_prevAC = malloc(N * sizeof(double));   // n in previous computation for same t
+  // double *p_prevAC = malloc(N * sizeof(double));   // p in previous computation for same t
+  // double *V_prevAC = malloc(N * sizeof(double));   // V in previous computation for same t
+  double *n_prev_tAC = malloc(N * sizeof(double)); // n in previous time instant.
+  double *p_prev_tAC = malloc(N * sizeof(double)); // p in previous time instant.
+  double *V_prev_tAC = malloc(N * sizeof(double)); // V in previous time instant.
+
+
+  // **** AC ANALYSIS STARTS HERE ****
+  tstep = 0;
+
+  // Copying the DC converging stuff into the AC vector
+  copy_arr(nAC, n, N);
+  copy_arr(pAC, p, N);
+  copy_arr(VAC, V, N);
+
+  double QAC = 0;   // For Q in AC analysis
+  double QprevAC = 0; // Temporary variable
+
+  double delq = 0;
+  double delqPrev = 0;
+  Vin.sin=(Vin.bias)/10;
+  QAC = solve_charge_density(V);
   while (tstep++ <= tstepmax) {
     iter=0;
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
-    //V[0]=Vin.bias+Vin.sin*sin(2*M_PI*(tstep/(double)sim.tdiv))+drichlet_factor;
-    V[0]=Vin.bias*1.1+drichlet_factor;
+
+    copy_arr(nAC, n_prev_tAC, N);
+    copy_arr(pAC, p_prev_tAC, N);
+    copy_arr(VAC, V_prev_tAC, N);
+
+    VAC[0]= drichlet_factor + Vin.bias + Vin.sin*sin((2*3.141*Vin.f*tstep*sim.dt));
+    VAC[N-1] = drichlet_factor; //bound fixed
+
+    
+
+    
+
     do {
-      printf("t=%d,iter=%d\n",tstep,iter);
-      copy_arr(n, n_prev, N);
-      copy_arr(p, p_prev, N);
-      copy_arr(V, V_prev, N);
+
       poisson(V, n, p, V[0], V[N - 1]);
       carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
 
-      // Logic for computing delta
-      delta = 0;
-      for (int i = 0; i < N; i++) {
-        compute_delta(&delta, V[i], V_prev[i]);
-        compute_delta(&delta, n[i], n_prev[i]);
-        compute_delta(&delta, p[i], p_prev[i]);
-      }
-      // if (delta <= 1e-25)
-      //   break;
+      poisson(VAC, nAC, pAC, VAC[0], VAC[N - 1]);
+      carrier_continuity(VAC, V_prev_tAC, n_prev_tAC, p_prev_tAC, nAC, pAC, N);
+  
+      
     } while (iter++ <= MAX_ITER);
-    Qac = solve_charge_density(V);
-    //fprintf(chargeac,"%e\n",solve_charge_density(V));
-    printf("%lf %d\n",Qac,tstep);
+    
+    QprevAC = QAC;
+    
+    QAC = solve_charge_density(VAC);
+    delta = fabs(1 - QAC / QprevAC);
+    delq = fabs(QAC - Qdc);
+
+    delqPrev = fabs(QprevAC - Qprev);
+    if(tstep%500==0)printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
+    if((delq - delqPrev)/(delq) < 1e-4)
+      break;
   }
-  double c=(Qac-Qdc)/(Vin.bias*0.1);
-  printf("Solved\n");*/
-  //fclose(chargedc);
-  //fclose(chargeac);
+
+ //BETTER METHOD : (try this) find QAC - QDC and then this is dq, do this for certain number of cycles, and observe if it is converging 
+ //find QAC - QDC and then this is dq, mostly max of dq in each cycle will converge, that is the output
+
+//descritise the peakpoints first
+//check the values of the voltages at these points and it it converges exit
+
   
 
   // Initializing Output
   output.Vbias=Vin.bias;
   output.dVac=Vin.sin;
   output.Qdc=Qdc;
-  output.dQac=Qac;
+  output.dQac=delq;
   free(n);
   free(p);
   free(V);
-  free(n_prev);
-  free(p_prev);
-  free(V_prev);
   free(n_prev_t);
   free(p_prev_t);
   free(V_prev_t);
+
+  free(nAC);
+  free(pAC);
+  free(VAC);
+  free(n_prev_tAC);
+  free(p_prev_tAC);
+  free(V_prev_tAC);
   return (output);
 }
 
