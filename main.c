@@ -17,9 +17,9 @@ int main(int argc, char *argv[]) {
   struct signal Vin;
   int i;
   int dcdiv=31;
-  double Vstart=2;
+  double Vstart=1.5;
   double Vend=-1;
-  Vin.f=1E8;
+  Vin.f=1E9;
   //scanf("%lf",&mos.Gr);
   FILE *out=fopen(argv[2],"w");
   shit *output=malloc(dcdiv*sizeof(shit));
@@ -30,8 +30,13 @@ int main(int argc, char *argv[]) {
     Vin.sin=(Vin.bias)/10;
     output[i] = solve_c(Vin);
   }
+  //Numerical Derivative for DC Capacitance.
+  for (i=1;i<dcdiv;i++){
+    output[i].Cdc=(output[i].Qdc-output[i-1].Qdc)/(output[i].Vbias-output[i-1].Vbias);
+  }
+  output[0].Cdc=(output[1].Qdc-output[0].Qdc)/(output[1].Vbias-output[0].Vbias);
   for(int i=0;i<dcdiv;i++)
-    fprintf(out,"%e\t%e\t%e\t%e\n", output[i].Vbias,output[i].Qdc,output[i].dVac,output[i].dQac);
+    fprintf(out,"%e\t%e\t%e\t%e\t%e\t%e\n", output[i].Vbias,output[i].Qdc,output[i].dVac,output[i].dQac,output[i].Cac,output[i].Cdc);
   fclose(out);
   free(output);
 }

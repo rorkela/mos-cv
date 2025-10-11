@@ -5,6 +5,8 @@ typedef struct{
 	double Vbias; // DC Bias
 	double dQac; //Charge for AC signal
 	double dVac; //Amplitude of the AC signal
+	double Cdc; //Capacitance for dc
+	double Cac; //Capacitance for ac
 } shit;
 shit solve_c(struct signal Vin);      // To call other functions and find C for that signal
 double solve_charge_density(double *V); // To solve for charge density

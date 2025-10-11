@@ -41,6 +41,7 @@ shit solve_c(struct signal Vin) {
     }
     V[i] = Vin.bias - (double)i/(N-1)*(Vin.bias-drichlet_factor);
   }
+  V[N-1]=drichlet_factor;
 
   // **** DC ANALYSIS STARTS HERE ****
   Qdc = solve_charge_density(V);
@@ -51,35 +52,17 @@ shit solve_c(struct signal Vin) {
     copy_arr(V, V_prev_t, N);
     do {
 
-    // printf("t=%d,iter=%d\n",tstep,iter);
-      //copy_arr(n, n_prev, N);
-      //copy_arr(p, p_prev, N);
-      //copy_arr(V, V_prev, N);
       poisson(V, n, p, V[0], V[N - 1]);
       carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
-      // Logic for computing delta
-      //delta = 0;
-      //for (int i = 0; i < N; i++) {
-      //  compute_delta(&delta, V[i], V_prev[i]);
-      //  compute_delta(&delta, n[i], n_prev[i]);
-      //  compute_delta(&delta, p[i], p_prev[i]);
-      //}
-      // if (delta <= 1e-25)
-      //   break;
       
     } while (iter++ <= MAX_ITER);
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
-    if(tstep%500==0)printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
+    //if(tstep%500==0)printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
     if (delta <= 2e-6 && tstep>MIN_TSTEP)
       break;
   }
-  // plotstate(sim.x,V,n,p);
-  //plotxy(sim.x,V,N/20);
-  //plotxy(sim.x,n,N/20);
-  //plotxy(sim.x,p,N/20);
-  // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
 
     // Initializing arrays for n p V and for previous time instant for AC STUFF
@@ -92,23 +75,23 @@ shit solve_c(struct signal Vin) {
   double *n_prev_tAC = malloc(N * sizeof(double)); // n in previous time instant.
   double *p_prev_tAC = malloc(N * sizeof(double)); // p in previous time instant.
   double *V_prev_tAC = malloc(N * sizeof(double)); // V in previous time instant.
-
-
+  output.Qdc=Qdc;
+  printf("AC Starting");
   // **** AC ANALYSIS STARTS HERE ****
   tstep = 0;
 
   // Copying the DC converging stuff into the AC vector
-  copy_arr(nAC, n, N);
-  copy_arr(pAC, p, N);
-  copy_arr(VAC, V, N);
+  copy_arr(n, nAC, N);
+  copy_arr(p, pAC, N);
+  copy_arr(V, VAC, N);
 
   double QAC = 0;   // For Q in AC analysis
   double QprevAC = 0; // Temporary variable
 
   double delq = 0;
   double delqPrev = 0;
-  Vin.sin=(Vin.bias)/10;
-  QAC = solve_charge_density(V);
+  Vin.sin=(Vin.bias-drichlet_factor)/5;
+  QAC = solve_charge_density(VAC);
   while (tstep++ <= tstepmax) {
     iter=0;
     copy_arr(n, n_prev_t, N);
@@ -118,13 +101,8 @@ shit solve_c(struct signal Vin) {
     copy_arr(nAC, n_prev_tAC, N);
     copy_arr(pAC, p_prev_tAC, N);
     copy_arr(VAC, V_prev_tAC, N);
-
-    VAC[0]= drichlet_factor + Vin.bias + Vin.sin*sin((2*3.141*Vin.f*tstep*sim.dt));
+    VAC[0]= Vin.bias + Vin.sin*sin((2*3.141*Vin.f*tstep*sim.dt));
     VAC[N-1] = drichlet_factor; //bound fixed
-
-    
-
-    
 
     do {
 
@@ -138,17 +116,20 @@ shit solve_c(struct signal Vin) {
     } while (iter++ <= MAX_ITER);
     
     QprevAC = QAC;
-    
     QAC = solve_charge_density(VAC);
-    delta = fabs(1 - QAC / QprevAC);
-    delq = fabs(QAC - Qdc);
+    Qdc = solve_charge_density(V);
+    delq = fmax(delq, ((QAC - Qdc)));
 
-    delqPrev = fabs(QprevAC - Qprev);
-    if(tstep%500==0)printf("bias=%e,t=%d,Qdc=%e,delta=%e\n",Vin.bias,tstep,Qdc,delta);
-    if((delq - delqPrev)/(delq) < 1e-4)
+
+    if(((tstep)%((int)(20/Vin.f/sim.dt))==0)){
+      delta = fabs(1 - delq / delqPrev);
+      printf("AC: bias=%e,t=%d,delq=%e,delta=%e\n",Vin.bias,tstep,delq,delta);
+      delqPrev=delq;
+      //if(delta<=1e-4)
       break;
+    }
   }
-
+  printf("AC Done");
  //BETTER METHOD : (try this) find QAC - QDC and then this is dq, do this for certain number of cycles, and observe if it is converging 
  //find QAC - QDC and then this is dq, mostly max of dq in each cycle will converge, that is the output
 
@@ -158,10 +139,11 @@ shit solve_c(struct signal Vin) {
   
 
   // Initializing Output
+  // DC charge was initialized right after DC part.
   output.Vbias=Vin.bias;
   output.dVac=Vin.sin;
-  output.Qdc=Qdc;
   output.dQac=delq;
+  output.Cac=fabs(delq/Vin.sin);
   free(n);
   free(p);
   free(V);
