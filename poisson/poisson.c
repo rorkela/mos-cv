@@ -1,5 +1,5 @@
 #include "../main.h"
-#define MAX_ITER 5
+#define MAX_ITER 20
 /* This one will use newton rhapson to solve.
  * Takes input as
  * V - Voltage array and with initial guess supplied.

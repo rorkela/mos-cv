@@ -12,7 +12,7 @@ void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, 
   double *Vprevnorm = malloc(N*sizeof(double));
   for(int i=0;i<N;i++) Vnorm[i]=V[i]/(kB*mos.T/q);
   for(int i=0;i<N;i++) Vprevnorm[i]=Vprev[i]/(kB*mos.T/q);
-  int maxiter=10;
+  int maxiter=20;
   int iter=0;
   computeJacobi_n(jac,mos.mu_n,Vnorm,p,N);
   do{

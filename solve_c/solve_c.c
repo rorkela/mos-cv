@@ -1,5 +1,5 @@
 #include "../main.h"
-#define MAX_ITER 20
+#define MAX_ITER 40
 #define MIN_TSTEP 50
 shit solve_c(struct signal Vin) {
   shit output;
@@ -72,7 +72,7 @@ shit solve_c(struct signal Vin) {
 //   double *n_prev_tAC = malloc(N * sizeof(double)); // n in previous time instant.
 //   double *p_prev_tAC = malloc(N * sizeof(double)); // p in previous time instant.
 //   double *V_prev_tAC = malloc(N * sizeof(double)); // V in previous time instant.
-//   output.Qdc=Qdc;
+    output.Qdc=Qdc;
 //
 //   printf("AC Starting");
 //   // **** AC ANALYSIS STARTS HERE ****
@@ -131,7 +131,7 @@ shit solve_c(struct signal Vin) {
 
   // Initializing Output
   // DC charge was initialized right after DC part.
-  // output.Vbias=Vin.bias;
+  output.Vbias=Vin.bias;
   // output.dVac=Vin.sin;
   // output.dQac=delq;
   // output.Cac=fabs(delq/Vin.sin);
