@@ -9,11 +9,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2 -fopenmp")
 set(SRC_FILES
     main.c
     parameter_fetch/parameter_fetch.c
-    carrier_continuity/carriermogged.c
+    carrier_continuity/carrier.c
     poisson/poisson.c
     solve_c/solve_c.c
     fileio/fileio.c
-    carrier_steady_state/carriermogged_ss.c
 )
 
 # Create executable
