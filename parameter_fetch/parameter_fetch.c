@@ -17,7 +17,7 @@ void init_default_parameters(void) {
   mos.Nc = 3.2e25;
 
   mos.T = 300.0;
-  mos.Gr = 1e28;
+  mos.Gr = 1e30;
   mos.C_Rr = 1.1e-8;
 }
 

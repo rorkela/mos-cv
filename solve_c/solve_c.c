@@ -65,76 +65,76 @@ shit solve_c(struct signal Vin) {
   }
   printf("solve_c.c: Qdc=%e\n", Qdc);
 
-  // Initializing arrays for n p V )(even for previous time instant) for AC analysis
-  double *nAC = malloc(N * sizeof(double));        // n for present computations
-  double *pAC = malloc(N * sizeof(double));        // p for present computations
-  double *VAC = malloc(N * sizeof(double));        // V for present computations
-  double *n_prev_tAC = malloc(N * sizeof(double)); // n in previous time instant.
-  double *p_prev_tAC = malloc(N * sizeof(double)); // p in previous time instant.
-  double *V_prev_tAC = malloc(N * sizeof(double)); // V in previous time instant.
-  output.Qdc=Qdc;
-
-  printf("AC Starting");
-  // **** AC ANALYSIS STARTS HERE ****
-  tstep = 0;
-
-  // Copying the DC converging stuff into the AC vector
-  copy_arr(n, nAC, N);
-  copy_arr(p, pAC, N);
-  copy_arr(V, VAC, N);
-
-  double QAC = 0;   // For Q in AC analysis
-  double QprevAC = 0; // Temporary variable
-
-  double delq = 0;
-  double delqPrev = 0;
-  Vin.sin=(Vin.bias-drichlet_factor)/10;
-  QAC = solve_charge_density(VAC);
-  while (tstep++ <= tstepmax) {
-    iter=0;
-    copy_arr(n, n_prev_t, N);
-    copy_arr(p, p_prev_t, N);
-    copy_arr(V, V_prev_t, N);
-
-    copy_arr(nAC, n_prev_tAC, N);
-    copy_arr(pAC, p_prev_tAC, N);
-    copy_arr(VAC, V_prev_tAC, N);
-    VAC[0]= Vin.bias + Vin.sin*sin((2*3.141*Vin.f*tstep*sim.dt));
-    VAC[N-1] = drichlet_factor; //bound fixed
-
-    do {
-
-      poisson(V, n, p, V[0], V[N - 1]);
-      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
-
-      poisson(VAC, nAC, pAC, VAC[0], VAC[N - 1]);
-      carrier_continuity(VAC, V_prev_tAC, n_prev_tAC, p_prev_tAC, nAC, pAC, N);
-  
-      
-    } while (iter++ <= MAX_ITER);
-    
-    QprevAC = QAC;
-    QAC = solve_charge_density(VAC);
-    Qdc = solve_charge_density(V);
-    delq = fmax(delq, ((QAC - Qdc)));
-
-
-    if(((tstep)%((int)(20/Vin.f/sim.dt))==0)){
-      delta = fabs(1 - delq / delqPrev);
-      printf("AC: bias=%e,t=%d,delq=%e,delta=%e\n",Vin.bias,tstep,delq,delta);
-      delqPrev=delq;
-      //if(delta<=1e-4)
-      break;
-    }
-  }
-  printf("AC Done");
+//   // Initializing arrays for n p V )(even for previous time instant) for AC analysis
+//   double *nAC = malloc(N * sizeof(double));        // n for present computations
+//   double *pAC = malloc(N * sizeof(double));        // p for present computations
+//   double *VAC = malloc(N * sizeof(double));        // V for present computations
+//   double *n_prev_tAC = malloc(N * sizeof(double)); // n in previous time instant.
+//   double *p_prev_tAC = malloc(N * sizeof(double)); // p in previous time instant.
+//   double *V_prev_tAC = malloc(N * sizeof(double)); // V in previous time instant.
+//   output.Qdc=Qdc;
+//
+//   printf("AC Starting");
+//   // **** AC ANALYSIS STARTS HERE ****
+//   tstep = 0;
+//
+//   // Copying the DC converging stuff into the AC vector
+//   copy_arr(n, nAC, N);
+//   copy_arr(p, pAC, N);
+//   copy_arr(V, VAC, N);
+//
+//   double QAC = 0;   // For Q in AC analysis
+//   double QprevAC = 0; // Temporary variable
+//
+//   double delq = 0;
+//   double delqPrev = 0;
+//   Vin.sin=(Vin.bias-drichlet_factor)/10;
+//   QAC = solve_charge_density(VAC);
+//   while (tstep++ <= tstepmax) {
+//     iter=0;
+//     copy_arr(n, n_prev_t, N);
+//     copy_arr(p, p_prev_t, N);
+//     copy_arr(V, V_prev_t, N);
+//
+//     copy_arr(nAC, n_prev_tAC, N);
+//     copy_arr(pAC, p_prev_tAC, N);
+//     copy_arr(VAC, V_prev_tAC, N);
+//     VAC[0]= Vin.bias + Vin.sin*sin((2*3.141*Vin.f*tstep*sim.dt));
+//     VAC[N-1] = drichlet_factor; //bound fixed
+//
+//     do {
+//
+//       poisson(V, n, p, V[0], V[N - 1]);
+//       carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
+//
+//       poisson(VAC, nAC, pAC, VAC[0], VAC[N - 1]);
+//       carrier_continuity(VAC, V_prev_tAC, n_prev_tAC, p_prev_tAC, nAC, pAC, N);
+//
+//
+//     } while (iter++ <= MAX_ITER);
+//
+//     QprevAC = QAC;
+//     QAC = solve_charge_density(VAC);
+//     Qdc = solve_charge_density(V);
+//     delq = fmax(delq, ((QAC - Qdc)));
+//
+//
+//     if(((tstep)%((int)(20/Vin.f/sim.dt))==0)){
+//       delta = fabs(1 - delq / delqPrev);
+//       printf("AC: bias=%e,t=%d,delq=%e,delta=%e\n",Vin.bias,tstep,delq,delta);
+//       delqPrev=delq;
+//       //if(delta<=1e-4)
+//       break;
+//     }
+//   }
+//   printf("AC Done");
 
   // Initializing Output
   // DC charge was initialized right after DC part.
-  output.Vbias=Vin.bias;
-  output.dVac=Vin.sin;
-  output.dQac=delq;
-  output.Cac=fabs(delq/Vin.sin);
+  // output.Vbias=Vin.bias;
+  // output.dVac=Vin.sin;
+  // output.dQac=delq;
+  // output.Cac=fabs(delq/Vin.sin);
 
   // Free allocated memory to prevent leaks
   free(n);
@@ -144,12 +144,12 @@ shit solve_c(struct signal Vin) {
   free(p_prev_t);
   free(V_prev_t);
 
-  free(nAC);
-  free(pAC);
-  free(VAC);
-  free(n_prev_tAC);
-  free(p_prev_tAC);
-  free(V_prev_tAC);
+  // free(nAC);
+  // free(pAC);
+  // free(VAC);
+  // free(n_prev_tAC);
+  // free(p_prev_tAC);
+  // free(V_prev_tAC);
 
   return (output);
 }
