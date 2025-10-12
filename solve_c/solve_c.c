@@ -90,7 +90,7 @@ shit solve_c(struct signal Vin) {
 
   double delq = 0;
   double delqPrev = 0;
-  Vin.sin=(Vin.bias-drichlet_factor)/5;
+  Vin.sin=(Vin.bias-drichlet_factor)/10;
   QAC = solve_charge_density(VAC);
   while (tstep++ <= tstepmax) {
     iter=0;
