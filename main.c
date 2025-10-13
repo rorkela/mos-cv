@@ -29,8 +29,8 @@ int main(int argc, char *argv[]) {
   progress[dcdiv + 2] = 0;
   for (int i = 0; i < dcdiv; i++)
     progress[i + 1] = ' ';
-// DONT IGNORE
-#pragma omp parallel for
+  // DONT IGNORE
+  #pragma omp parallel for
   for (i = 0; i < dcdiv; i++) {
     printf("%s------%3d/%3d-------\n", progress, i, dcdiv);
     Vin.bias = i * Vend / dcdiv + (dcdiv - i) * Vstart / dcdiv;

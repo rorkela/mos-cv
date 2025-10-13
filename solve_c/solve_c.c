@@ -134,8 +134,11 @@ shit solve_c(struct signal Vin) {
   // output.dQac=delq;
   // output.Cac=fabs(delq/Vin.sin);
 
+
+  // UNCOMMENT THIS FOR V n p PLOTS
+  //plotstate(sim.x, V, n, p);
+
   // Free allocated memory to prevent leaks
-  plotstate(sim.x, V, n, p);
   free(n);
   free(p);
   free(V);
