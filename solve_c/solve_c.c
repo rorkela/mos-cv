@@ -1,8 +1,8 @@
 #include "../main.h"
 #define MAX_ITER 40
 #define MIN_TSTEP 50
-shit solve_c(struct signal Vin) {
-  shit output;
+outputarr solve_c(struct signal Vin) {
+  outputarr output;
   int N = mos.nz;
 
   double drichlet_factor = kB * mos.T / q * log(mos.Nc / n_teq); // WARNING: Hardcoded for n doped
@@ -15,7 +15,7 @@ shit solve_c(struct signal Vin) {
 
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = 2500;
+  int tstepmax = 5000;
   sim.dt = 2e-12;
 
   // Initializing arrays for n p V and for previous time instant

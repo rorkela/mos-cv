@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
   // scanf("%lf",&mos.Gr);
   //  For output
   FILE *out = fopen(argv[2], "w");
-  shit *output = malloc(dcdiv * sizeof(shit));
+  outputarr *output = malloc(dcdiv * sizeof(outputarr));
 
   // For progress printing IGNORE
   char *progress = malloc(dcdiv * sizeof(char) + 3);
