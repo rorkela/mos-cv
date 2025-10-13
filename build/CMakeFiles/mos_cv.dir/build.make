@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/r/mos-cv
+CMAKE_SOURCE_DIR = /home/sarthak/Documents/NMDM/mos-cv
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/r/mos-cv/build
+CMAKE_BINARY_DIR = /home/sarthak/Documents/NMDM/mos-cv/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/mos_cv.dir/depend.make
@@ -73,88 +73,88 @@ CMakeFiles/mos_cv.dir/codegen:
 .PHONY : CMakeFiles/mos_cv.dir/codegen
 
 CMakeFiles/mos_cv.dir/main.c.o: CMakeFiles/mos_cv.dir/flags.make
-CMakeFiles/mos_cv.dir/main.c.o: /home/r/mos-cv/main.c
+CMakeFiles/mos_cv.dir/main.c.o: /home/sarthak/Documents/NMDM/mos-cv/main.c
 CMakeFiles/mos_cv.dir/main.c.o: CMakeFiles/mos_cv.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/r/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/mos_cv.dir/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/main.c.o -MF CMakeFiles/mos_cv.dir/main.c.o.d -o CMakeFiles/mos_cv.dir/main.c.o -c /home/r/mos-cv/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/mos_cv.dir/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/main.c.o -MF CMakeFiles/mos_cv.dir/main.c.o.d -o CMakeFiles/mos_cv.dir/main.c.o -c /home/sarthak/Documents/NMDM/mos-cv/main.c
 
 CMakeFiles/mos_cv.dir/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/mos_cv.dir/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/r/mos-cv/main.c > CMakeFiles/mos_cv.dir/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sarthak/Documents/NMDM/mos-cv/main.c > CMakeFiles/mos_cv.dir/main.c.i
 
 CMakeFiles/mos_cv.dir/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/mos_cv.dir/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/r/mos-cv/main.c -o CMakeFiles/mos_cv.dir/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sarthak/Documents/NMDM/mos-cv/main.c -o CMakeFiles/mos_cv.dir/main.c.s
 
 CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o: CMakeFiles/mos_cv.dir/flags.make
-CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o: /home/r/mos-cv/parameter_fetch/parameter_fetch.c
+CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o: /home/sarthak/Documents/NMDM/mos-cv/parameter_fetch/parameter_fetch.c
 CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o: CMakeFiles/mos_cv.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/r/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o -MF CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o.d -o CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o -c /home/r/mos-cv/parameter_fetch/parameter_fetch.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o -MF CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o.d -o CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.o -c /home/sarthak/Documents/NMDM/mos-cv/parameter_fetch/parameter_fetch.c
 
 CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/r/mos-cv/parameter_fetch/parameter_fetch.c > CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sarthak/Documents/NMDM/mos-cv/parameter_fetch/parameter_fetch.c > CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.i
 
 CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/r/mos-cv/parameter_fetch/parameter_fetch.c -o CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sarthak/Documents/NMDM/mos-cv/parameter_fetch/parameter_fetch.c -o CMakeFiles/mos_cv.dir/parameter_fetch/parameter_fetch.c.s
 
 CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o: CMakeFiles/mos_cv.dir/flags.make
-CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o: /home/r/mos-cv/carrier_continuity/carrier.c
+CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o: /home/sarthak/Documents/NMDM/mos-cv/carrier_continuity/carrier.c
 CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o: CMakeFiles/mos_cv.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/r/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o -MF CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o.d -o CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o -c /home/r/mos-cv/carrier_continuity/carrier.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o -MF CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o.d -o CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.o -c /home/sarthak/Documents/NMDM/mos-cv/carrier_continuity/carrier.c
 
 CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/r/mos-cv/carrier_continuity/carrier.c > CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sarthak/Documents/NMDM/mos-cv/carrier_continuity/carrier.c > CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.i
 
 CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/r/mos-cv/carrier_continuity/carrier.c -o CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sarthak/Documents/NMDM/mos-cv/carrier_continuity/carrier.c -o CMakeFiles/mos_cv.dir/carrier_continuity/carrier.c.s
 
 CMakeFiles/mos_cv.dir/poisson/poisson.c.o: CMakeFiles/mos_cv.dir/flags.make
-CMakeFiles/mos_cv.dir/poisson/poisson.c.o: /home/r/mos-cv/poisson/poisson.c
+CMakeFiles/mos_cv.dir/poisson/poisson.c.o: /home/sarthak/Documents/NMDM/mos-cv/poisson/poisson.c
 CMakeFiles/mos_cv.dir/poisson/poisson.c.o: CMakeFiles/mos_cv.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/r/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/mos_cv.dir/poisson/poisson.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/poisson/poisson.c.o -MF CMakeFiles/mos_cv.dir/poisson/poisson.c.o.d -o CMakeFiles/mos_cv.dir/poisson/poisson.c.o -c /home/r/mos-cv/poisson/poisson.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/mos_cv.dir/poisson/poisson.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/poisson/poisson.c.o -MF CMakeFiles/mos_cv.dir/poisson/poisson.c.o.d -o CMakeFiles/mos_cv.dir/poisson/poisson.c.o -c /home/sarthak/Documents/NMDM/mos-cv/poisson/poisson.c
 
 CMakeFiles/mos_cv.dir/poisson/poisson.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/mos_cv.dir/poisson/poisson.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/r/mos-cv/poisson/poisson.c > CMakeFiles/mos_cv.dir/poisson/poisson.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sarthak/Documents/NMDM/mos-cv/poisson/poisson.c > CMakeFiles/mos_cv.dir/poisson/poisson.c.i
 
 CMakeFiles/mos_cv.dir/poisson/poisson.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/mos_cv.dir/poisson/poisson.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/r/mos-cv/poisson/poisson.c -o CMakeFiles/mos_cv.dir/poisson/poisson.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sarthak/Documents/NMDM/mos-cv/poisson/poisson.c -o CMakeFiles/mos_cv.dir/poisson/poisson.c.s
 
 CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o: CMakeFiles/mos_cv.dir/flags.make
-CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o: /home/r/mos-cv/solve_c/solve_c.c
+CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o: /home/sarthak/Documents/NMDM/mos-cv/solve_c/solve_c.c
 CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o: CMakeFiles/mos_cv.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/r/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o -MF CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o.d -o CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o -c /home/r/mos-cv/solve_c/solve_c.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o -MF CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o.d -o CMakeFiles/mos_cv.dir/solve_c/solve_c.c.o -c /home/sarthak/Documents/NMDM/mos-cv/solve_c/solve_c.c
 
 CMakeFiles/mos_cv.dir/solve_c/solve_c.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/mos_cv.dir/solve_c/solve_c.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/r/mos-cv/solve_c/solve_c.c > CMakeFiles/mos_cv.dir/solve_c/solve_c.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sarthak/Documents/NMDM/mos-cv/solve_c/solve_c.c > CMakeFiles/mos_cv.dir/solve_c/solve_c.c.i
 
 CMakeFiles/mos_cv.dir/solve_c/solve_c.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/mos_cv.dir/solve_c/solve_c.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/r/mos-cv/solve_c/solve_c.c -o CMakeFiles/mos_cv.dir/solve_c/solve_c.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sarthak/Documents/NMDM/mos-cv/solve_c/solve_c.c -o CMakeFiles/mos_cv.dir/solve_c/solve_c.c.s
 
 CMakeFiles/mos_cv.dir/fileio/fileio.c.o: CMakeFiles/mos_cv.dir/flags.make
-CMakeFiles/mos_cv.dir/fileio/fileio.c.o: /home/r/mos-cv/fileio/fileio.c
+CMakeFiles/mos_cv.dir/fileio/fileio.c.o: /home/sarthak/Documents/NMDM/mos-cv/fileio/fileio.c
 CMakeFiles/mos_cv.dir/fileio/fileio.c.o: CMakeFiles/mos_cv.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/r/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/mos_cv.dir/fileio/fileio.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/fileio/fileio.c.o -MF CMakeFiles/mos_cv.dir/fileio/fileio.c.o.d -o CMakeFiles/mos_cv.dir/fileio/fileio.c.o -c /home/r/mos-cv/fileio/fileio.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/mos_cv.dir/fileio/fileio.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mos_cv.dir/fileio/fileio.c.o -MF CMakeFiles/mos_cv.dir/fileio/fileio.c.o.d -o CMakeFiles/mos_cv.dir/fileio/fileio.c.o -c /home/sarthak/Documents/NMDM/mos-cv/fileio/fileio.c
 
 CMakeFiles/mos_cv.dir/fileio/fileio.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/mos_cv.dir/fileio/fileio.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/r/mos-cv/fileio/fileio.c > CMakeFiles/mos_cv.dir/fileio/fileio.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/sarthak/Documents/NMDM/mos-cv/fileio/fileio.c > CMakeFiles/mos_cv.dir/fileio/fileio.c.i
 
 CMakeFiles/mos_cv.dir/fileio/fileio.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/mos_cv.dir/fileio/fileio.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/r/mos-cv/fileio/fileio.c -o CMakeFiles/mos_cv.dir/fileio/fileio.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/sarthak/Documents/NMDM/mos-cv/fileio/fileio.c -o CMakeFiles/mos_cv.dir/fileio/fileio.c.s
 
 # Object files for target mos_cv
 mos_cv_OBJECTS = \
@@ -177,7 +177,7 @@ mos_cv: CMakeFiles/mos_cv.dir/fileio/fileio.c.o
 mos_cv: CMakeFiles/mos_cv.dir/build.make
 mos_cv: CMakeFiles/mos_cv.dir/compiler_depend.ts
 mos_cv: CMakeFiles/mos_cv.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/r/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C executable mos_cv"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking C executable mos_cv"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mos_cv.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -189,6 +189,6 @@ CMakeFiles/mos_cv.dir/clean:
 .PHONY : CMakeFiles/mos_cv.dir/clean
 
 CMakeFiles/mos_cv.dir/depend:
-	cd /home/r/mos-cv/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/r/mos-cv /home/r/mos-cv /home/r/mos-cv/build /home/r/mos-cv/build /home/r/mos-cv/build/CMakeFiles/mos_cv.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/sarthak/Documents/NMDM/mos-cv/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/sarthak/Documents/NMDM/mos-cv /home/sarthak/Documents/NMDM/mos-cv /home/sarthak/Documents/NMDM/mos-cv/build /home/sarthak/Documents/NMDM/mos-cv/build /home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles/mos_cv.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/mos_cv.dir/depend
 

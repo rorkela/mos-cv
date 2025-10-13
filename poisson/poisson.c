@@ -19,9 +19,9 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
   // NOTE: Think of Jx=F where J is jacobian, X is update, F is -F(x) (- is
   // embedded inside beforehand for convenience) Since J is tridiagonal, i store
   // it in a Nx3 matrix. Saves time and space.
-  double *J = malloc(3*N*sizeof(double));
-  double *X = malloc(N*sizeof(double));
-  double *F = malloc(N*sizeof(double));
+  double *J = malloc(3 * N * sizeof(double));
+  double *X = malloc(N * sizeof(double));
+  double *F = malloc(N * sizeof(double));
   // Jacobian
   // NOTE: Needs to be built once. For one run, the Jacobian is constant.
   J[0 * 3 + 1] = 1;
@@ -67,8 +67,8 @@ void thomas(double *A, double *B, int N, double *x) {
   // X is the update so Nx1
 
   // pass the number of rows in this function which is just mos.nz
-  double *c_new = malloc(N*sizeof(double)); // the diagonal elements above the one wala in the T matrix
-  double *d_new = malloc(N*sizeof(double)); // the B matrix after the row operations and normalisation
+  double *c_new = malloc(N * sizeof(double)); // the diagonal elements above the one wala in the T matrix
+  double *d_new = malloc(N * sizeof(double)); // the B matrix after the row operations and normalisation
   // Forward elimination
   // normalise the first and put the values already
   c_new[0] = A[2] / A[1]; // c1 / b1

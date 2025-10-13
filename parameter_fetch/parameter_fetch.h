@@ -3,7 +3,7 @@
 #define kB 1.380649e-23 // J/K
 #define q 1.602176634e-19
 #define IN_OX(i) ((i) * mos.dx <= mos.t_oxide)
-#define n_teq mos.ni*mos.ni/mos.Na
+#define n_teq mos.ni *mos.ni / mos.Na
 #define p_teq mos.Na
 // To store the input parameters for voltage.
 // V=V.bias+V.sin*sin(2*M_PI*f*T);
@@ -19,15 +19,15 @@ struct mos_param {
   int nz;         // Meshing points.
   double dx;      // Meshing distance. Computed. DONT SET.
 
-  double eps_oxide; //Oxide permittivity
-  double eps_si;  //Semiconductor permittivity
-  double Na;   // Acceptor Doping conc
-  double Nd;   // Donor Doping conc
-  double mu_n; // Mobility of n in silicon
-  double mu_p; // Mobility of p in silicon
-  double ni;   // Intrinsic Carrier Concentration
-  double Nc;   // Effective DOS in CB
-  double Nv;   // Effective DOS in VB
+  double eps_oxide; // Oxide permittivity
+  double eps_si;    // Semiconductor permittivity
+  double Na;        // Acceptor Doping conc
+  double Nd;        // Donor Doping conc
+  double mu_n;      // Mobility of n in silicon
+  double mu_p;      // Mobility of p in silicon
+  double ni;        // Intrinsic Carrier Concentration
+  double Nc;        // Effective DOS in CB
+  double Nv;        // Effective DOS in VB
 
   double T;    // Temperature
   double Gr;   // Generation rate uniformly assumed
@@ -39,9 +39,9 @@ struct sim_param {
   double *Nd;   // donor doping. To be computed
   double *Na;   // acceptor doping. To be computed
   double *perm; // permittivity. To be computed
-  double dt; //Timestep.
-  double *x; //x axis position of each meshing point. To be computed
-  int tdiv; //Deprecated
+  double dt;    // Timestep.
+  double *x;    // x axis position of each meshing point. To be computed
+  int tdiv;     // Deprecated
 };
 extern struct sim_param sim;
 extern struct mos_param mos;
