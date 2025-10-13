@@ -15,7 +15,7 @@ shit solve_c(struct signal Vin) {
 
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = 1000000;
+  int tstepmax = 2500;
   sim.dt = 2e-12;
 
   // Initializing arrays for n p V and for previous time instant
@@ -136,7 +136,7 @@ shit solve_c(struct signal Vin) {
 
 
   // UNCOMMENT THIS FOR V n p PLOTS
-  //plotstate(sim.x, V, n, p);
+  // plotstate(sim.x, V, n, p);
 
   // Free allocated memory to prevent leaks
   free(n);
