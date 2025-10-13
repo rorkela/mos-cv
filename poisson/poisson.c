@@ -1,5 +1,5 @@
 #include "../main.h"
-#define MAX_ITER 100
+#define MAX_ITER 20
 /* This one will use newton rhapson to solve.
  * Takes input as
  * V - Voltage array and with initial guess supplied.
@@ -19,80 +19,56 @@ void poisson(double *V, double *n, double *p, double Vbound1, double Vbound2) {
   // NOTE: Think of Jx=F where J is jacobian, X is update, F is -F(x) (- is
   // embedded inside beforehand for convenience) Since J is tridiagonal, i store
   // it in a Nx3 matrix. Saves time and space.
-  double *J = calloc(N * 3, sizeof(double));
-  double *X = malloc(N * sizeof(double));
-  double *F = malloc(N * sizeof(double));
-  double Fnorm = 0;
-  double Fnorm_prev = 0;
-  // Initializting residual
-  F[0] = 0;
-  F[N - 1] = 0;
-  for (int i = 1; i < N - 1; i++)
-    F[i] = (1 / (2 * dx * dx) *
-                 ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
-                  (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
-                  (permittivity[i] + permittivity[i + 1]) * V[i + 1]) +
-             q * (Nd[i] - Na[i] - n[i] + p[i]));
-  for(int i=0;i<N;i++)F[i]=-F[i];
-  for (i = 0; i < N; i++)
-    Fnorm = fmax(Fnorm, fabs(F[i]));
+  double *J = malloc(3*N*sizeof(double));
+  double *X = malloc(N*sizeof(double));
+  double *F = malloc(N*sizeof(double));
+  // Jacobian
+  // NOTE: Needs to be built once. For one run, the Jacobian is constant.
+  J[0 * 3 + 1] = 1;
+  J[(N - 1) * 3 + 1] = 1;
+  J[0 * 3 + 0] = J[0 * 3 + 2] = 0;
+  J[(N - 1) * 3 + 0] = J[(N - 1) * 3 + 2] = 0;
+  for (i = 1; i < N - 1; i++) {
+    J[i * 3] = (permittivity[i] + permittivity[i - 1]) / (2 * dx * dx);
+    J[i * 3 + 1] = -(2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) / (2 * dx * dx) -
+                   q * q * (p[i] + n[i]) / (kB * mos.T);
+    J[i * 3 + 2] = (permittivity[i] + permittivity[i + 1]) / (2 * dx * dx);
+  }
   do {
     // Setting boundary conditions
     V[0] = Vbound1;
     V[N - 1] = Vbound2;
-    J[0 * 3 + 1] = 1;
-    J[(N - 1) * 3 + 1] = 1;
-    J[0 * 3 + 0] = J[0 * 3 + 2] = 0;
-    J[(N - 1) * 3 + 0] = J[(N - 1) * 3 + 2] = 0;
-    for (i = 1; i < N - 1; i++) {
-      J[i * 3] = (permittivity[i] + permittivity[i - 1]) / (2 * dx * dx);
-      J[i * 3 + 1] = -(2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) / (2 * dx * dx) -
-                     q * q * (p[i] + n[i]) / (kB * mos.T);
-      J[i * 3 + 2] = (permittivity[i] + permittivity[i + 1]) / (2 * dx * dx);
-    }
-
-    // NOTE: To solve this matrix Ax=B, LU decomposition can be used. However
-    // this is tridiagonal so Thomas algorithm gives O(n) time complexity.
-    thomas(J, F, N, X);
-    for (int i = 1; i < N - 1; i++) // Not accounting for boundary conditions.
-                                    // So loop starts at 1 and ends at N-2
-    {
-      V[i] += X[i];
-    }
+    // Residual
     F[0] = 0;
     F[N - 1] = 0;
-    Fnorm_prev = Fnorm;
     for (int i = 1; i < N - 1; i++) {
       F[i] = (1 / (2 * dx * dx) *
-                   ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
-                    (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
-                    (permittivity[i] + permittivity[i + 1]) * V[i + 1]) +
-               q * (Nd[i] - Na[i] - n[i] + p[i]));
+                  ((permittivity[i] + permittivity[i - 1]) * V[i - 1] -
+                   (2 * permittivity[i] + permittivity[i + 1] + permittivity[i - 1]) * V[i] +
+                   (permittivity[i] + permittivity[i + 1]) * V[i + 1]) +
+              q * (Nd[i] - Na[i] - n[i] + p[i]));
     }
-    for(int i=0;i<N;i++) F[i]=-F[i];
-    // Computing norm for stopping in convergence
-    Fnorm = 0;
-    for (i = 0; i < N; i++)
-      Fnorm = fmax(Fnorm, fabs(F[i]));
-    /*if (Fnorm / Fnorm_prev < 1e-6)
-    {
-      printf("poisson.c: took %d iterations\n",iter);
-      break;
-    }*/
+    // Inverting Residual
+    for (int i = 0; i < N; i++)
+      F[i] = -F[i];
+    thomas(J, F, N, X);
+    // Update
+    //  NOTE: Not accounting for boundary conditions. So loop starts at 1 and ends at N-2
+    for (int i = 1; i < N - 1; i++)
+      V[i] += X[i];
   } while (iter++ <= MAX_ITER);
   free(J);
   free(X);
   free(F);
 }
-
 void thomas(double *A, double *B, int N, double *x) {
   // here assumed the A matrix passed to this is already compacted tridiagonal Nx3
   // B matrix should be Nx1
   // X is the update so Nx1
 
   // pass the number of rows in this function which is just mos.nz
-  double *c_new = malloc(N * sizeof(double)); // the diagonal elements above the one wala in the T matrix
-  double *d_new = malloc(N * sizeof(double)); // the B matrix after the row operations and normalisation
+  double *c_new = malloc(N*sizeof(double)); // the diagonal elements above the one wala in the T matrix
+  double *d_new = malloc(N*sizeof(double)); // the B matrix after the row operations and normalisation
   // Forward elimination
   // normalise the first and put the values already
   c_new[0] = A[2] / A[1]; // c1 / b1

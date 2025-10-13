@@ -1,33 +1,34 @@
 #include "../main.h"
-#define MAX_ITER 10
-double solve_c(struct signal Vin) {
+#define MAX_ITER 40
+#define MIN_TSTEP 50
+shit solve_c(struct signal Vin) {
+  shit output;
   int N = mos.nz;
-  double drichlet_factor = kB * mos.T * log(mos.Nc / mos.Nd); // WARNING: Hardcoded for n doped
+
+  double drichlet_factor = kB * mos.T /q* log(mos.Nc / n_teq); // WARNING: Hardcoded for n doped
   double delta = 0;
   int iter = 0;
+
   // Defining variables for charge density for C calculations
   double Qdc;   // For Q in DC steady state
-  double Qac;   // For Maximum Q in AC
-  double Qprev; // Temporary variable
+  double Qprev = 0; // Temporary variable
+
   // Defining parameters for time
   int tstep = 0;
-  int tstepmax = 10;
-  sim.dt = 1e-10;
+  int tstepmax = 1000000;
+  sim.dt = 2e-12;
+
   // Initializing arrays for n p V and for previous time instant
   double *n = malloc(N * sizeof(double));        // n for present computations
   double *p = malloc(N * sizeof(double));        // p for present computations
   double *V = malloc(N * sizeof(double));        // V for present computations
-  double *n_prev = malloc(N * sizeof(double));   // n in previous computation for same t
-  double *p_prev = malloc(N * sizeof(double));   // p in previous computation for same t
-  double *V_prev = malloc(N * sizeof(double));   // V in previous computation for same t
   double *n_prev_t = malloc(N * sizeof(double)); // n in previous time instant.
   double *p_prev_t = malloc(N * sizeof(double)); // p in previous time instant.
   double *V_prev_t = malloc(N * sizeof(double)); // V in previous time instant.
   
-  // DEBUG:
-  //FILE *chargedc=fopen("charge_trans_dc.txt","w");
-  //FILE *chargeac=fopen("charge_trans_ac.txt","w");
-  // Starting from thermal equilibrium conditions at t=0;
+  //Adding dirichlet factor; taking into account fermi-level reference
+  Vin.bias=Vin.bias+drichlet_factor;
+
   for (int i = 0; i < N; i++) {
     if (IN_OX(i)) {
       n[i] = 0;
@@ -37,105 +38,133 @@ double solve_c(struct signal Vin) {
       n[i] = n_teq;
       p[i] = p_teq;
     }
-    V[i] = Vin.bias * (1 - (double)i / (N - 1)) + drichlet_factor;
+    V[i] = Vin.bias - (double)i/(N-1)*(Vin.bias-drichlet_factor);
   }
+  V[N-1]=drichlet_factor;
+
+  // **** DC ANALYSIS STARTS HERE ****
   Qdc = solve_charge_density(V);
-     plotstate(sim.x,V,n,p);
   while (tstep++ <= tstepmax) {
     iter=0;
-    printf("iter=%d",iter);
+
     copy_arr(n, n_prev_t, N);
     copy_arr(p, p_prev_t, N);
     copy_arr(V, V_prev_t, N);
-    do {
 
-    printf("t=%d,iter=%d\n",tstep,iter);
-      copy_arr(n, n_prev, N);
-      copy_arr(p, p_prev, N);
-      copy_arr(V, V_prev, N);
+    do {
       poisson(V, n, p, V[0], V[N - 1]);
       carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
-      // Logic for computing delta
-      delta = 0;
-      for (int i = 0; i < N; i++) {
-        compute_delta(&delta, V[i], V_prev[i]);
-        compute_delta(&delta, n[i], n_prev[i]);
-        compute_delta(&delta, p[i], p_prev[i]);
-      }
-      // if (delta <= 1e-25)
-      //   break;
-      
     } while (iter++ <= MAX_ITER);
+
     Qprev = Qdc;
     Qdc = solve_charge_density(V);
     delta = fabs(1 - Qdc / Qprev);
-    //fprintf(chargedc,"%e\n",Qdc);
-    printf("%e\n",Qdc);
-    //if (delta <= 5e-3)
-    //  break; // Tolerance is 0.5% change
+
+    if (delta <= 2e-6 && tstep>MIN_TSTEP)
+      break;
   }
-  plotxy(sim.x,V,N/20);
-  plotxy(sim.x,n,N/20);
-  plotxy(sim.x,p,N/20);
-  getchar();
-  plotstate(sim.x,V,n,p);
-  // TODO: plotstate(sim.x,V,n,p);
   printf("solve_c.c: Qdc=%e\n", Qdc);
-  // AC Analysis
-  tstep=0;
-  tstepmax=100;
-  Qac=Qdc;
-  while (tstep++ <= tstepmax) {
-    iter=0;
-    copy_arr(n, n_prev_t, N);
-    copy_arr(p, p_prev_t, N);
-    copy_arr(V, V_prev_t, N);
-    //V[0]=Vin.bias+Vin.sin*sin(2*M_PI*(tstep/(double)sim.tdiv))+drichlet_factor;
-    V[0]=Vin.bias+Vin.sin+drichlet_factor;
-    do {
 
-      copy_arr(n, n_prev, N);
-      copy_arr(p, p_prev, N);
-      copy_arr(V, V_prev, N);
-      poisson(V, n, p, V[0], V[N - 1]);
-      carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
+//   // Initializing arrays for n p V )(even for previous time instant) for AC analysis
+//   double *nAC = malloc(N * sizeof(double));        // n for present computations
+//   double *pAC = malloc(N * sizeof(double));        // p for present computations
+//   double *VAC = malloc(N * sizeof(double));        // V for present computations
+//   double *n_prev_tAC = malloc(N * sizeof(double)); // n in previous time instant.
+//   double *p_prev_tAC = malloc(N * sizeof(double)); // p in previous time instant.
+//   double *V_prev_tAC = malloc(N * sizeof(double)); // V in previous time instant.
+    output.Qdc=Qdc;
+//
+//   printf("AC Starting");
+//   // **** AC ANALYSIS STARTS HERE ****
+//   tstep = 0;
+//
+//   // Copying the DC converging stuff into the AC vector
+//   copy_arr(n, nAC, N);
+//   copy_arr(p, pAC, N);
+//   copy_arr(V, VAC, N);
+//
+//   double QAC = 0;   // For Q in AC analysis
+//   double QprevAC = 0; // Temporary variable
+//
+//   double delq = 0;
+//   double delqPrev = 0;
+//   Vin.sin=(Vin.bias-drichlet_factor)/10;
+//   QAC = solve_charge_density(VAC);
+//   while (tstep++ <= tstepmax) {
+//     iter=0;
+//     copy_arr(n, n_prev_t, N);
+//     copy_arr(p, p_prev_t, N);
+//     copy_arr(V, V_prev_t, N);
+//
+//     copy_arr(nAC, n_prev_tAC, N);
+//     copy_arr(pAC, p_prev_tAC, N);
+//     copy_arr(VAC, V_prev_tAC, N);
+//     VAC[0]= Vin.bias + Vin.sin*sin((2*3.141*Vin.f*tstep*sim.dt));
+//     VAC[N-1] = drichlet_factor; //bound fixed
+//
+//     do {
+//
+//       poisson(V, n, p, V[0], V[N - 1]);
+//       carrier_continuity(V, V_prev_t, n_prev_t, p_prev_t, n, p, N);
+//
+//       poisson(VAC, nAC, pAC, VAC[0], VAC[N - 1]);
+//       carrier_continuity(VAC, V_prev_tAC, n_prev_tAC, p_prev_tAC, nAC, pAC, N);
+//
+//
+//     } while (iter++ <= MAX_ITER);
+//
+//     QprevAC = QAC;
+//     QAC = solve_charge_density(VAC);
+//     Qdc = solve_charge_density(V);
+//     delq = fmax(delq, ((QAC - Qdc)));
+//
+//
+//     if(((tstep)%((int)(20/Vin.f/sim.dt))==0)){
+//       delta = fabs(1 - delq / delqPrev);
+//       printf("AC: bias=%e,t=%d,delq=%e,delta=%e\n",Vin.bias,tstep,delq,delta);
+//       delqPrev=delq;
+//       //if(delta<=1e-4)
+//       break;
+//     }
+//   }
+//   printf("AC Done");
 
-      // Logic for computing delta
-      delta = 0;
-      for (int i = 0; i < N; i++) {
-        compute_delta(&delta, V[i], V_prev[i]);
-        compute_delta(&delta, n[i], n_prev[i]);
-        compute_delta(&delta, p[i], p_prev[i]);
-      }
-      // if (delta <= 1e-25)
-      //   break;
-    } while (iter++ <= MAX_ITER);
-    Qac = fmax(Qac,solve_charge_density(V));
-    //fprintf(chargeac,"%e\n",solve_charge_density(V));
-    printf("%lf %d\n",Qac,tstep);
-  }
-  double c=(Qac-Qdc)/Vin.sin;
-  printf("Solved\n");
-  //fclose(chargedc);
-  //fclose(chargeac);
+  // Initializing Output
+  // DC charge was initialized right after DC part.
+  output.Vbias=Vin.bias;
+  // output.dVac=Vin.sin;
+  // output.dQac=delq;
+  // output.Cac=fabs(delq/Vin.sin);
+
+  // Free allocated memory to prevent leaks
   free(n);
   free(p);
   free(V);
-  free(n_prev);
-  free(p_prev);
-  free(V_prev);
   free(n_prev_t);
   free(p_prev_t);
   free(V_prev_t);
-  return c;
+
+  // free(nAC);
+  // free(pAC);
+  // free(VAC);
+  // free(n_prev_tAC);
+  // free(p_prev_tAC);
+  // free(V_prev_tAC);
+
+  return (output);
 }
 
-double solve_charge_density(double *V) // To solve for charge density
+// Function to solve for charge density using gauss's law
+double solve_charge_density(double *V)
 {
   return -mos.eps_oxide * (V[2] - V[1]) / mos.dx;
 }
 
+// Function to copy an array into an other one
 void copy_arr(double *source, double *target, int N) {
   memcpy(target,source,N*sizeof(double));
 }
-void compute_delta(double *delta, double val, double valprev) { *delta = fmax(*delta, fabs(val - valprev)); }
+
+// Function to compute absolute error b/w consecutive iterations
+void compute_delta(double *delta, double val, double valprev) {
+*delta = fmax(*delta, fabs(val - valprev)); }
