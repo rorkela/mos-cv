@@ -1,3 +1,0 @@
-/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles/mos_cv.dir
-/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles/edit_cache.dir
-/home/sarthak/Documents/NMDM/mos-cv/build/CMakeFiles/rebuild_cache.dir
