@@ -1,5 +1,9 @@
 #ifndef CARRIER
 #define CARRIER
+#include <stdlib.h>
+#include <math.h>
+#include "../common/common.h"
+#include "../thomas/thomas.h"
 void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, double *n, double *p, int N);
 void compute_J(double *J, double *V, double *n, double u, int N);
 void computeJacobi_n(double *Jac, double u, double *V, double *p, int N);

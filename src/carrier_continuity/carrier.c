@@ -1,5 +1,4 @@
 #include "carrier.h"
-#include "../main.h"
 #define B(z) (z == 0.0 ? 1 : (z) / expm1((z)))
 void carrier_continuity(double *V, double *Vprev, double *nprev, double *pprev, double *n, double *p, int N) {
   // Newton Rhapson used

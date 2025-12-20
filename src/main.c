@@ -1,5 +1,4 @@
 #include "main.h"
-#include "parameter_fetch/parameter_fetch.h"
 int main(int argc, char *argv[]) {
   // initialization
   init_default_parameters();

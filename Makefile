@@ -1,43 +1,17 @@
-# Compiler and flags
-CC      := gcc
-CFLAGS  := -Wall -Wextra -Ofast -I./src 
-LDFLAGS := -lm -fopenmp
+.PHONY: all configure build clean rebuild
 
-# Target executable
-TARGET  := build/moscv
-CONFIG := build/config.txt
-# Source files (recursive)
-SRCS := \
-    src/main.c \
-    src/carrier_continuity/carrier.c \
-    src/fileio/fileio.c \
-    src/parameter_fetch/parameter_fetch.c \
-    src/poisson/poisson.c \
-    src/solve_c/solve_c.c
+BUILD_DIR := build
 
-# Object files
-OBJS := $(SRCS:src/%.c=build/%.o)
+all: build
 
-# Default target
-all: $(TARGET)
+configure:
+	@mkdir -p $(BUILD_DIR)
+	cmake -S . -B $(BUILD_DIR)
 
-# Link
-$(TARGET): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+build: configure
+	cmake --build $(BUILD_DIR)
 
-# Compile
-build/%.o: src/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@ $(LDFLAGS)
-
-
-
-# Config file generation
-$(CONFIG):$(TARGET)
-	
-config:$(CONFIG)
 clean:
-	rm -rf build
+	rm -rf $(BUILD_DIR)
 
-# Phony targets
-.PHONY: all clean
+rebuild: clean all

@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "solve_c.h"
 #define MAX_ITER 40
 #define MIN_TSTEP 50
 outputarr solve_c(struct signal Vin) {

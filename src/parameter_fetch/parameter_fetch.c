@@ -1,6 +1,4 @@
-#include "../main.h"
-struct mos_param mos;
-struct sim_param sim;
+#include "parameter_fetch.h"
 void init_default_parameters(void) {
   mos.t_oxide = 5e-7;
   mos.area = 10e-6;
