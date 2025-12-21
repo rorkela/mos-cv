@@ -1,6 +1,6 @@
 #include "poisson.h"
 #define MAX_ITER 20
-/* This one will use newton rhapson to solve.
+/** This one will use newton rhapson to solve.
  * Takes input as
  * V - Voltage array and with initial guess supplied.
  * n - conc at that time instant

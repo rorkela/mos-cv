@@ -10,10 +10,7 @@ extern const double q;
 typedef struct {
   double Qdc;   // Charge in DC
   double Vbias; // DC Bias
-  double dQac;  // Charge for AC signal
-  double dVac;  // Amplitude of the AC signal
   double Cdc;   // Capacitance for dc
-  double Cac;   // Capacitance for ac
 } outputarr;
 
 struct signal {

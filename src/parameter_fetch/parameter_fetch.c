@@ -15,7 +15,7 @@ void init_default_parameters(void) {
   mos.Nc = 3.2e25;
 
   mos.T = 300.0;
-  mos.Gr = 1e30;
+  mos.Gr = 1e29;
   mos.C_Rr = 1.1e-8;
 }
 
@@ -109,7 +109,7 @@ void load_or_create_parameters(const char *filename) {
   }
 }
 
-void init_params() {
+void init_simulation_parameters() {
   sim.perm = malloc(mos.nz * sizeof(double));
   sim.Na = malloc(mos.nz * sizeof(double));
   sim.Nd = malloc(mos.nz * sizeof(double));
@@ -130,4 +130,3 @@ void init_params() {
     sim.x[i] = i * mos.dx;
   }
 }
-void print_parameters(void) {}
